@@ -1,0 +1,3 @@
+/.quarto/
+# Ignore all .xls and .xlsx files
+*.xls*

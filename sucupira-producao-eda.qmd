@@ -1,0 +1,282 @@
+---
+title: "Análise de Básica de Dados da Plataforma Sucupira"
+lightbox: true
+lang: pt
+---
+
+## Sobre
+
+Na seção [Baixando os dados](sucupira-baixando.qmd#como-obter-os-dados) obtivemos vários dados da Plataforma Sucupira, e na seção [Pré-Processamento dos Dados](sucupira-preprocessamento.qmd) reorganizamos os dados baixados em *dataframes*.
+
+Neste documento veremos como criar alguns gráficos sobre a produção intelectual do nosso programa. Os códigos neste documento assumem que os *dataframes* foram pré-processados e armazenados como mostrado na seção [Pré-Processamento dos Dados](sucupira-preprocessamento.qmd).
+
+## Análise Exploratória de Dados
+
+Antes de mostrar os gráficos e códigos que os criaram vamos importar as bibliotecas necessárias. Usaremos a biblioteca [Plotly](https://plotly.com/python/) para os gráficos:
+
+```{python}
+import pandas as pd
+import plotly.graph_objs as go
+import plotly.express as px
+```
+
+### Qual é o perfil de nossa produção tecnológica?
+
+Podemos ver a quantidade e proporção dos diferentes tipos de produção tecnológica com um gráfico do tipo _sunburst_. Primeiro lemos o *dataframe* com toda a produção unificada:
+
+```{python}
+dir = "Resources/Data/ColetaSucupira/"
+df = pd.read_csv(dir+"CategoriaDeAutoresPorProdução-Unificada.csv")
+```
+
+Para criar um gráfico do tipo _sunburst_ é preciso agrupar os dados do _dataframe_ pelos níveis hierárquicos desejados, calculando a quantidade de itens que pertence a cada combinação dos níveis. O código a seguir faz isto:
+
+```{python}
+dfAgrupado = df.groupby(['Tipo da Produção', 'Subtipo da Produção']).\
+                         size().reset_index(name='Total')
+# Criamos a figura.
+fig = px.sunburst(dfAgrupado, path=['Tipo da Produção', 'Subtipo da Produção'], 
+                  values='Total')
+fig.update_traces(hovertemplate='<b>Tipo:</b> %{label}<br>'+
+                                '<b>Subtipo:</b> %{parent}<br>'+
+                                '<b>Total:</b> %{value}')
+fig.show()
+```
+
+### Qual é a evolução da nossa produção tecnológica? 
+
+Podemos ver o total por ano das produções tecnológicas de nosso programa com um gráfico de barras. Primeiro é preciso agrupar as produções por ano:
+
+```{python}
+dfProdPorAno = df.groupby('Ano da Produção').size()
+```
+
+Com as produções agrupadas podemos criar um gráfico de barras com o código abaixo:
+
+```{python}
+fig = go.Figure()
+fig.add_trace(go.Bar(
+              x=dfProdPorAno.index,y=dfProdPorAno.values,
+              text=dfProdPorAno.values,
+              marker_color='#1269B1'))
+fig.update_layout(title='Produções Intelectuais por Ano',
+                  xaxis=dict(title='Ano', tickmode='linear', tick0=0, dtick=1),
+                  yaxis=dict(title='Produções'))    
+fig.show()    
+```
+
+Podemos detalhar o gráfico usando cores diferentes para cada tipo e subtipo da produção. Como temos 14 ou mais combinações de tipos e subtipos será melhor fazer dois gráficos separados, um para `Tipo da Produção` = `BIBLIOGRÁFICA` e outro para `Tipo da Produção` = `TÉCNICA`. 
+
+Vamos começar com as produções bibliográficas, criando um subconjunto do _dataframe_ completo e agrupando por ano e subtipo:
+
+```{python}
+dfProdBibliográfica = df[df['Tipo da Produção'] == 'BIBLIOGRÁFICA']
+dfProdPorAnoECat = dfProdBibliográfica.groupby(['Ano da Produção', 
+                                                'Subtipo da Produção']).\
+                                                 size().reset_index(name='Produções')
+```
+
+A criação do gráfico de barras empilhadas é feita com este código:
+
+```{python}
+fig = px.bar(dfProdPorAnoECat, 
+             x='Ano da Produção',y='Produções', 
+             color='Subtipo da Produção', 
+             barmode='stack')
+fig.update_layout(title='Produções Bibliográficas por Ano',
+                  xaxis=dict(title='Ano', tickmode='linear', tick0=0, dtick=1),
+                  yaxis=dict(title='Produções'))    
+fig.show()
+```
+
+Agora faremos o mesmo para produções técnicas:
+
+```{python}
+dfProdTécnica = df[df['Tipo da Produção'] == 'TÉCNICA']
+dfProdPorAnoECat = dfProdTécnica.groupby(['Ano da Produção', 
+                                          'Subtipo da Produção']).\
+                                          size().reset_index(name='Produções')
+```
+
+Usamos basicamente o mesmo código para criar o gráfico de barras empilhadas:
+
+```{python}
+fig = px.bar(dfProdPorAnoECat, 
+             x='Ano da Produção',y='Produções', 
+             color='Subtipo da Produção', 
+             barmode='stack')
+fig.update_layout(title='Produções Técnicas por Ano',
+                  xaxis=dict(title='Ano', tickmode='linear', tick0=0, dtick=1),
+                  yaxis=dict(title='Produções'))    
+fig.show()
+```
+
+### Qual é a evolução da nossa produção tecnológica (com coautoria discente)? 
+
+Vamos ver quanto da nossa produção tecnológica tem coautoria discente por ano. Para isto preciso separar o _dataframe_ em dois complementares, e agrupar estes dois pelo ano da produção:
+
+```{python}
+dfProdComDisc = df[df['Discente'] > 0]
+dfProdComDisc = dfProdComDisc.groupby('Ano da Produção').size()
+dfProdSemDisc = df[df['Discente'] == 0]
+dfProdSemDisc = dfProdSemDisc.groupby('Ano da Produção').size()
+```
+
+Vamos usar dois traços no gráfico:
+
+```{python}
+traçoComDiscentes = go.Bar(x=dfProdComDisc.index,y=dfProdComDisc.values,
+                           name='Com Discentes',marker_color='#0dbf7b')
+traçoSemDiscentes = go.Bar(x=dfProdSemDisc.index,y=dfProdSemDisc.values,
+                           name='Sem Discentes',marker_color='#220dbf')
+```
+
+Criamos e ajustamos a figura:
+
+```{python}
+fig = go.Figure(data=[traçoComDiscentes, traçoSemDiscentes])
+fig.update_layout(
+    title='Produções Intelectuais por Ano (com participação de discentes)',
+    xaxis=dict(title='Ano', tickmode='linear', tick0=0, dtick=1),
+    yaxis=dict(title='Produções'),
+    barmode='stack')
+fig.show()
+```
+
+Mas queremos visualizar também as produções bibliográficas com coautoria por ano. Vamos refazer o _dataframe_ com este filtro adicional: 
+
+```{python}
+dfProdComDisc = dfProdBibliográfica[dfProdBibliográfica['Discente'] > 0]
+dfProdComDisc = dfProdComDisc.groupby('Ano da Produção').size()
+dfProdSemDisc = dfProdBibliográfica[dfProdBibliográfica['Discente'] == 0]
+dfProdSemDisc = dfProdSemDisc.groupby('Ano da Produção').size()
+```
+
+Recriamos os traços:
+
+```{python}
+traçoComDiscentes = go.Bar(x=dfProdComDisc.index,y=dfProdComDisc.values,
+                           name='Com Discentes',marker_color='#0dbf7b')
+traçoSemDiscentes = go.Bar(x=dfProdSemDisc.index,y=dfProdSemDisc.values,
+                           name='Sem Discentes',marker_color='#220dbf')
+```
+
+E o gráfico, com basicamente os mesmos comandos de antes.
+
+```{python}
+fig = go.Figure(data=[traçoComDiscentes, traçoSemDiscentes])
+fig.update_layout(
+    title='Produções Bibliográficas por Ano (com participação de discentes)',
+    xaxis=dict(title='Ano', tickmode='linear', tick0=0, dtick=1),
+    yaxis=dict(title='Produções'),
+    barmode='stack')
+fig.show()
+```
+
+### Qual é a evolução da nossa produção tecnológica (com único autor)? 
+
+Um dos indicadores da interdisciplinaridade é a quantidade de publicações em coautorias. Para verificar o histórico destas publicações vamos criar um novo campo para o _dataframe_ original que contém a quantidade de autores independente da categoria:
+
+```{python}
+df['NumAutores'] = df[['Docente', 'Egresso', 'Participante Externo', \
+                       'Pós-Doc', 'Sem Categoria', 'Discente']].sum(axis=1)
+```
+
+Vamos considerar somente produções do tipo `BIBLIOGRÁFICA`:
+
+```{python}
+dfProdBibliográfica = df[df['Tipo da Produção'] == 'BIBLIOGRÁFICA']
+```
+
+Com isto podemos criar os _dataframes_ filtrados: 
+
+```{python}
+dfProdCom1 = dfProdBibliográfica[dfProdBibliográfica['NumAutores'] == 1]
+dfProdCom1 = dfProdCom1.groupby('Ano da Produção').size()
+dfProdComN = dfProdBibliográfica[dfProdBibliográfica['NumAutores'] > 1]
+dfProdComN = dfProdComN.groupby('Ano da Produção').size()
+```
+
+E agora os traços:
+
+```{python}
+traçoCom1 = go.Bar(x=dfProdCom1.index,y=dfProdCom1.values,
+                   name='Um Autor',marker_color='#0dbf7b')
+traçoComN = go.Bar(x=dfProdComN.index,y=dfProdComN.values,
+                   name='Vários Autores',marker_color='#220dbf')
+```
+
+```{python}
+fig = go.Figure(data=[traçoCom1, traçoComN])
+fig.update_layout(
+    title='Produções Bibliográficas por Ano (com coautorias)',
+    xaxis=dict(title='Ano', tickmode='linear', tick0=0, dtick=1),
+    yaxis=dict(title='Produções'),
+    barmode='stack')
+fig.show()
+```
+
+
+```{python}
+```
+
+
+```{python}
+```
+
+
+```{python}
+```
+
+
+```{python}
+```
+
+
+```{python}
+```
+
+
+```{python}
+```
+
+
+```{python}
+```
+
+
+```{python}
+```
+
+
+```{python}
+```
+
+
+```{python}
+```
+
+
+```{python}
+```
+
+
+```{python}
+```
+
+
+```{python}
+```
+
+
+```{python}
+```
+
+
+```{python}
+```
+
+
+```{python}
+```
+

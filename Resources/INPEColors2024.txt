@@ -1,0 +1,180 @@
+#FFFFFF White
+#000000 Black
+#7F7F7F Gray
+#C0C0C0 Gray
+#0D7DBD InpeBlue
+#F79322 InpeOrange
+#25bf0d InpeBlueMinus90H
+#0dbf7b InpeBlueMinus45H
+#220dbf InpeBluePlus45H
+#a70dbf InpeBluePlus90H
+#f722f0 InpeOrangeMinus90H
+#f72250 InpeOrangeMinus45H
+#baf722 InpeOrangePlus45H
+#22f729 InpeOrangePlus90H
+#5c6970 InpeBlueDesat
+#988d81 InpeOrangeDesat
+
+#0D7DBD	BlueToWhite1
+#278BC4	BlueToWhite2
+#4299CB	BlueToWhite3
+#5DA8D3	BlueToWhite4
+#78B6DA	BlueToWhite5
+#93C5E1	BlueToWhite6
+#AED3E9	BlueToWhite7
+#C9E2F0	BlueToWhite8
+#E4F0F7	BlueToWhite9
+#FFFFFF BlueToWhite10
+
+#F79322	OrangeToWhite1
+#F79F3A	OrangeToWhite2
+#F8AB53	OrangeToWhite3
+#F9B76B	OrangeToWhite4
+#FAC384	OrangeToWhite5
+#FBCF9C	OrangeToWhite6
+#FCDBB5	OrangeToWhite7
+#FDE7CD OrangeToWhite8
+#FEF3E6	OrangeToWhite9
+#FFFFFF OrangeToWhite10
+
+#0D7EBF	BlueToBlack1
+#0B70A9	BlueToBlack2	
+#0A6294	BlueToBlack3
+#08547F	BlueToBlack4
+#07466A	BlueToBlack5
+#053854	BlueToBlack6
+#042A3F	BlueToBlack7
+#021C2A	BlueToBlack8
+#010E15	BlueToBlack9
+#000000	BlueToBlack10
+
+#F79322	OrangeToBlack1
+#DB821E	OrangeToBlack2
+#C0721A	OrangeToBlack3
+#A46216	OrangeToBlack4
+#895112	OrangeToBlack5
+#6D410F	OrangeToBlack6
+#52310B	OrangeToBlack7
+#362007	OrangeToBlack8
+#1B1003	OrangeToBlack9
+#000000	OrangeToBlack10
+
+#0D7DBD	InpeBlueMinus90H_1
+#0F84A9	InpeBlueMinus90H_2
+#128B95	InpeBlueMinus90H_3
+#159382	InpeBlueMinus90H_4
+#179A6E	InpeBlueMinus90H_5
+#1AA15B	InpeBlueMinus90H_6
+#1DA947	InpeBlueMinus90H_7
+#1FB034	InpeBlueMinus90H_8
+#22B720	InpeBlueMinus90H_9
+#25BF0D InpeBlueMinus90H_10
+
+#0D7DBD	InpeBlueMinus45H_1
+#0D84B5	InpeBlueMinus45H_2
+#0D8BAE	InpeBlueMinus45H_3
+#0D93A7	InpeBlueMinus45H_4
+#0D9A9F	InpeBlueMinus45H_5
+#0DA198	InpeBlueMinus45H_6
+#0DA991	InpeBlueMinus45H_7
+#0DB089	InpeBlueMinus45H_8
+#0DB782	InpeBlueMinus45H_9
+#0DBF7B InpeBlueMinus45H_10
+
+#0D7DBD	InpeBluePlus45H_1
+#0F70BD	InpeBluePlus45H_2
+#1164BD	InpeBluePlus45H_3
+#1457BD	InpeBluePlus45H_4
+#164BBD	InpeBluePlus45H_5
+#183EBE	InpeBluePlus45H_6
+#1B32BE	InpeBluePlus45H_7
+#1D25BE	InpeBluePlus45H_8
+#1F19BE	InpeBluePlus45H_9
+#220DBF InpeBluePlus45H_10
+
+#0D7DBD	InpeBluePlus90H_1
+#1E70BD	InpeBluePlus90H_2
+#2F64BD	InpeBluePlus90H_3
+#4057BD	InpeBluePlus90H_4
+#514BBD	InpeBluePlus90H_5
+#623EBE	InpeBluePlus90H_6
+#7332BE	InpeBluePlus90H_7
+#8425BE	InpeBluePlus90H_8
+#9519BE	InpeBluePlus90H_9
+#A70DBF InpeBluePlus90H_10
+
+
+#F79322	InpeOrangeMinus90H_1
+#F78638	InpeOrangeMinus90H_2
+#F7794F	InpeOrangeMinus90H_3
+#F76D66	InpeOrangeMinus90H_4
+#F7607D	InpeOrangeMinus90H_5
+#F75494	InpeOrangeMinus90H_6
+#F747AB	InpeOrangeMinus90H_7
+#F73BC2	InpeOrangeMinus90H_8
+#F72ED9	InpeOrangeMinus90H_9
+#F722F0 InpeOrangeMinus90H_10
+
+
+#F79322	InpeOrangeMinus45H_1
+#F78627	InpeOrangeMinus45H_2
+#F7792C	InpeOrangeMinus45H_3
+#F76D31	InpeOrangeMinus45H_4
+#F76036	InpeOrangeMinus45H_5
+#F7543B	InpeOrangeMinus45H_6
+#F74740	InpeOrangeMinus45H_7
+#F73B45	InpeOrangeMinus45H_8
+#F72E4A	InpeOrangeMinus45H_9
+#F72250 InpeOrangeMinus45H_10
+
+
+#F79322	InpeOrangePlus45H_1
+#F09E22	InpeOrangePlus45H_2
+#E9A922	InpeOrangePlus45H_3
+#E2B422	InpeOrangePlus45H_4
+#DBBF22	InpeOrangePlus45H_5
+#D5CA22	InpeOrangePlus45H_6
+#CED522	InpeOrangePlus45H_7
+#C7E022	InpeOrangePlus45H_8
+#C0EB22	InpeOrangePlus45H_9
+#BAF722	InpeOrangePlus45H_10
+
+#F79322	InpeOrangePlus90H_1
+#DF9E22	InpeOrangePlus90H_2	
+#C7A923	InpeOrangePlus90H_3	
+#B0B424	InpeOrangePlus90H_4	
+#98BF25	InpeOrangePlus90H_5	
+#80CA25	InpeOrangePlus90H_6	
+#69D526	InpeOrangePlus90H_7	
+#51E027	InpeOrangePlus90H_8	
+#39EB28	InpeOrangePlus90H_9
+#22F729	InpeOrangePlus90H_10
+
+
+
+#0D7DBD	InpeBlueDesat_1
+#157AB4	InpeBlueDesat_2
+#1E78AB	InpeBlueDesat_3
+#2776A3	InpeBlueDesat_4
+#30749A	InpeBlueDesat_5
+#387192	InpeBlueDesat_6
+#416F89	InpeBlueDesat_7
+#4A6D81	InpeBlueDesat_8
+#536B78	InpeBlueDesat_9
+#5C6970 InpeBlueDesat_10
+
+
+#F79322	InpeOrangeDesat_1
+#EC922C	InpeOrangeDesat_2	
+#E19137	InpeOrangeDesat_3	
+#D79141	InpeOrangeDesat_4	
+#CC904C	InpeOrangeDesat_5	
+#C28F56	InpeOrangeDesat_6	
+#B78F61	InpeOrangeDesat_7	
+#AD8E6B	InpeOrangeDesat_8	
+#A28D76	InpeOrangeDesat_9	
+#988D81 InpeOrangeDesat_10
+
+
+
+

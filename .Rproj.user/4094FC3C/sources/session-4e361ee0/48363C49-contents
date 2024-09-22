@@ -1,0 +1,22 @@
+project:
+  type: website
+  output-dir: docs
+
+website:
+  title: "CAPESData"
+  navbar:
+    left:
+      - href: index.qmd
+        text: Home
+      - sucupira.qmd
+      - dadosabertos.qmd
+    
+
+format:
+  html:
+    theme: cosmo
+    css: styles.css
+    toc: true
+
+editor: visual
+

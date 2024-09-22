@@ -1,0 +1,232 @@
+---
+title: "Pré-Processamento dos Dados da Plataforma Sucupira"
+lightbox: true
+lang: pt
+---
+## Sobre
+
+Os [dados baixados da Plataforma Sucupira](sucupira-baixando.qmd) estão na forma de planilhas do Excel, e podem contar informações redundantes e desnecessárias para as análises que queremos fazer, além de necessitarem de organização para facilitar o processamento. Neste documento veremos como transformar as planilhas em bases de dados que facilitarão as análises.
+
+## Reorganizando as Produções Intelectuais
+
+As [planilhas dos anos anteriores](sucupira-baixando.qmd#) contém todos os dados submetidos à Plataforma Sucupira, com uma planilha por ano, e com cada planilha representando categorias de dados submetidos à plataforma. Para os exemplos neste documento precisamos somente dos dados de produção científica, que estão armazenados em uma das abas da planilha. Uma cópia da tela da planilha (mostrando algumas de suas abas) e alguns registros sobre a de produção intelectual é mostrada abaixo.
+
+![](Resources/Images/Sucupira-planilha-completa-anos-anteriores.webp){.lightbox}
+
+Podemos ver que a produção intelectual não é representada na planilha por um conjunto de linhas e colunas uniforme -- os dados de uma produção intelectual estão distribuídos em várias linhas, algumas com pares de campos (detalhamentos da produção) em uma coluna para o nome e uma para o valor do detalhamento; e os nomes e categorias dos autores em colunas separadas. A imagem abaixo mostra o detalhamento de uma **única** produção contida nesta planilha.
+
+![](Resources/Images/Sucupira-planilha-detalhe-anos-anteriores.webp){.lightbox}
+
+Para algumas das análises que queremos fazer precisamos ler as planilhas, filtrar todas as colunas desnecessárias e recuperar das múltiplas linhas por produção os dados que precisamos, no caso, número de autores por categoria por arquivo. Usaremos Python para este preprocessamento.
+
+Primeiro importamos as bibliotecas necessárias:
+
+```{python}
+import pandas as pd
+import glob
+import re
+import warnings
+from IPython.display import Markdown
+```
+
+Para cada planilha vamos ler a aba `Produção Intelectual` da planilha, filtrar alguns campos que não são necessários e separar somente as linhas que tem nomes de autores. Como repetiremos estes passos para cada planilha é melhor definir uma função em Python que recebe o nome do arquivo e retorna um *dataframe* com os campos e linhas que precisamos:
+
+```{python}
+def preprocessaProducoes(fileName):
+    # Lemos a planilha.
+    with warnings.catch_warnings():
+        warnings.filterwarnings("ignore", category=UserWarning, 
+                                module=re.escape('openpyxl.styles.stylesheet'))
+        df = pd.read_excel(fileName,engine='openpyxl',sheet_name='Produção Intelectual')
+    # Removemos os campos indesejados.    
+    drop = ['Calendário', 'Ano do Calendário', 
+            'Data-Hora do Envio','Código do PPG','Nome do PPG',
+            'Área de Avaliação','IES Sigla','IES Nome',
+            'Nome do Detalhamento','Valor do Detalhamento','Número de Ordem Autor'
+             ]
+    df = df.drop(columns=drop)
+    # Removemos os campos onde 'Nome do Autor' estiver vazio.
+    df = df.dropna(subset=['Nome do Autor'])
+    return df
+```
+
+A biblioteca usada para a leitura de planilhas gera advertências no código, para isto usamos filtros de alertas (veja mais detalhes [aqui](https://stackoverflow.com/questions/66214951/deal-with-openpyxl-warning-workbook-contains-no-default-style-apply-openpyxl/77942784)).
+
+Os dados que precisamos estão todos armazenados em planilhas, uma por ano, em um diretório (a lista de planilhas para este documento pode ser vista [aqui](sucupira-baixando.qmd#arquivos-baixados-neste-exemplo)):
+
+```{python}
+dir = "Resources/Data/ColetaSucupira/"
+```
+
+Podemos então criar uma lista de arquivos com nomes semelhantes no diretório indicado e uma lista de *dataframes* para receber os dados:
+
+```{python}
+fileNames = glob.glob(dir+"relatorio_dados_enviados_coleta_20??.xlsx")
+dfs = []
+```
+
+Agora podemos ler cada um destes arquivos, filtrar linhas e colunas e anexar o *dataframe* filtrado à lista de *dataframes*:
+
+```{python}
+for file in fileNames:
+    df = preprocessaProducoes(file)
+    dfs.append(df)
+```
+
+Em uma linha concatenaremos todos os *dataframes* da produção intelectual do conjunto de planilhas:
+
+```{python}
+dfconcatenado = pd.concat(dfs, ignore_index=True)    
+```
+
+Devemos manter somente as produções que **não** foram glosadas:
+
+```{python}
+dfconcatenado = dfconcatenado[dfconcatenado['Produção Glosada?'] == 'Não']
+dfconcatenado.drop(columns=['Produção Glosada?'], inplace=True)
+```
+
+Agora temos todas as produções intelectuais de todos os anos que foram coletados na Plataforma Sucupira sobre nosso programa de pós-graduação. Mas estes dados ainda não estão prontos para a análise que queremos fazer: cada registro no *dataframe* contém informação sobre uma produção e um autor, portanto uma produção com quatro autores está representada em quatro registros.
+
+Podemos entender melhor este *dataframe* temporário criando um subconjunto dele contendo somente registros do artigo *"A PLATFORM FOR LAND USE AND LAND COVER DATA INTEGRATION AND TRAJECTORY ANALYSIS"*. Para visualizar melhor este subconjunto visualizando-o como uma tabela (eliminando antes alguns campos redundantes para facilitar a visualização):
+
+```{python}
+dfamostra = dfconcatenado.loc[dfconcatenado['Título da Produção'] == 
+           'A PLATFORM FOR LAND USE AND LAND COVER DATA INTEGRATION AND TRAJECTORY ANALYSIS']
+dfamostra = dfamostra.drop(columns=['Área de Concentração','Linha de Pesquisa','Projeto de Pesquisa'])
+```
+
+A amostra do *dataframe* pode ser visualizado com o código abaixo:
+
+```{python}
+Markdown(dfamostra.to_markdown(index=False))
+```
+
+A tabela acima mostra que os valores dos campos `Título da Produção`, `Tipo da Produção` e `Subtipo da Produção` são os mesmos para a produção. Cada autor da produção aparece em um registro do *dataframe* com sua categoria. O que precisamos, para esta análise, é saber para cada produção quantos autores de cada categoria temos. Para isto precisamos do código a seguir:
+
+```{python}
+dfProdAnter = dfamostra.pivot_table(index=['Ano da Produção', 'Título da Produção', 
+                                           'Tipo da Produção', 'Subtipo da Produção'],
+                                           columns='Categoria do Autor',
+                                           values='Nome do Autor',
+                                           aggfunc='count',
+                                           fill_value=0).reset_index()
+```
+
+O código acima cria um novo *dataframe* a partir da amostra usando como identificador único das produção uma combinação dos campos `Ano da Produção`, `Título da Produção`, `Tipo da Produção` e `Subtipo da Produção`; criando novos campos com os valores presentes na coluna `Categoria do Autor` e contando os nomes em cada categoria para cada identificador único. Campos com contagem inexistente serão preenchidos com zeros.
+
+Podemos visualizar o resultado na tabela abaixo.
+
+```{python}
+Markdown(dfProdAnter.to_markdown(index=False))
+```
+
+Com o resultado comprovado podemos criar um *dataframe* que indica quantos autores por categoria para cada produção temos na base inteira.
+
+```{python}
+dfProdAnter = dfconcatenado.pivot_table(index=['Ano da Produção', 'Título da Produção', 
+                                               'Tipo da Produção', 'Subtipo da Produção'],
+                                               columns='Categoria do Autor',
+                                               values='Nome do Autor',
+                                               aggfunc='count',
+                                               fill_value=0).reset_index()
+```
+
+Vamos renomear o campo `Egresso - null`, criado pelos procedimentos anteriores a partir dos valores do campo `Categoria do Autor`.
+
+```{python}
+dfProdAnter.rename(columns={'Egresso - null': 'Egresso'}, inplace=True)
+```
+
+Vamos também armazenar este *dataframe* em um arquivo para uso posterior.
+
+```{python}
+dfProdAnter.to_csv(dir+"CategoriaDeAutoresPorProdução-AnosAnteriores.csv",index=False)                                     
+```
+
+Vejamos os primeiros cinco registros deste novo *dataframe*:
+
+```{python}
+Markdown(dfProdAnter.head(5).to_markdown(index=False))
+```
+
+### Complementando com dados de produções do ano corrente
+
+A [planilha com dados do ano corrente](sucupira-baixando.qmd#dados-do-preenchimento-do-ano-corrente) (o que está em preenchimento na Plataforma Sucupira ou que foi enviada no ano) tem um formato ligeiramente diferente do das planilhas dos anos já preenchidos. A figura a seguir mostra uma cópia da tela da planilha do ano corrente (_no caso, 2023_), mostrando os registros da produção intelectual.
+
+![](Resources/Images/Sucupira-planilha-completa-ano-atual.webp){.lightbox}
+
+Nesta planilha uma  produção intelectual também é representada por um conjunto de linhas e colunas, com nomes e categorias de coautores em linhas separadas. A imagem abaixo mostra o detalhamento de uma única produção contida nesta planilha.
+
+![](Resources/Images/Sucupira-planilha-detalhe-ano-atual.webp){.lightbox}
+
+Nesta seção iremos formatar estes dados de forma a deixá-los compatíveis com os que foram coletados nos anos passados. 
+
+Depois de [baixar a planilha com dados do ano corrente](sucupira-baixando.qmd#dados-do-preenchimento-do-ano-corrente) e renomeá-la adequadamente podemos usar o código abaixo para ler a única aba (`Produções - Autores`) em um _dataframe_.
+
+```{python}
+filename = "ListaReplicadaComAutores.xls"
+with warnings.catch_warnings():
+     warnings.filterwarnings("ignore", category=UserWarning, 
+                             module=re.escape('openpyxl.styles.stylesheet'))
+     df = pd.read_excel(dir+filename,engine='openpyxl',sheet_name='Produções - Autores')
+```
+
+Para eliminar as colunas do _dataframe_ que não serão necessárias usamos o código a seguir:
+
+```{python}
+keep = ['Ano da Produção','Nome da Produção','Tipo de Produção',
+        'Subtipo de Produção','Nome do Autor','Categoria do Autor']
+df = df.drop(columns=[col for col in df.columns if col not in keep])
+```
+
+Outro passo no processamento dos dados da planilha das produções do ano corrente é renomear algumas colunas para que fiquem compatíveis com as planilhas das produções dos anos anteriores.
+
+```{python}
+df.rename(columns={'Nome da Produção': 'Título da Produção', 
+                   'Tipo de Produção': 'Tipo da Produção', 
+                   'Subtipo de Produção': 'Subtipo da Produção'}, inplace=True)
+```
+
+Podemos reorganizar o *dataframe* para conter somente uma publicação por linha e com a contagem de autores por categorias com o código abaixo:
+
+```{python}
+dfProdAtual = df.pivot_table(index=['Ano da Produção', 'Título da Produção', 
+                                    'Tipo da Produção', 'Subtipo da Produção'],
+                                    columns='Categoria do Autor',
+                                    values='Nome do Autor',
+                                    aggfunc='count',
+                                    fill_value=0).reset_index()
+```
+
+Finalmente armazenamos este *dataframe* para uso posterior.
+
+```{python}
+dfProdAtual.to_csv(dir+"CategoriaDeAutoresPorProdução-AnoCorrente.csv",index=False)                                     
+```
+
+### Unificando as bases de dados de Produções Intelectuais
+
+Neste ponto temos duas bases de dados: `CategoriaDeAutoresPorProdução-AnosAnteriores.csv` e `CategoriaDeAutoresPorProdução-AnoCorrente.csv`. Embora as duas representem basicamente as mesmas informações, o formato é ligeiramente diferente na ordem das colunas e nos campos, que podem ser diferentes dependendo das categorias de coautores presentes nas planilhas originais. O código nesta seção ajusta e unifica os dados.
+
+A planilha com os dados de anos anteriores diferencia entre coautores de categorias `Discente - Mestrado` e `Discente - Doutorado`, mas a do ano atual não. Devemos então unificar as colunas `Discente - Mestrado` e `Discente - Doutorado` do *dataframe* contendo a produção intelectual dos anos anteriores, armazenando a soma na coluna nova `Discente`.
+
+```{python}
+dfProdAnter = dfProdAnter.assign(Discente=lambda x: x['Discente - Doutorado'] + x['Discente - Mestrado'])
+dfProdAnter = dfProdAnter.drop(columns=['Discente - Doutorado', 'Discente - Mestrado'])
+```
+
+Com isto posso unificar os *dataframes* contendo a produção intelectual dos anos anteriores e a do ano atual. O *dataframe* resultante receberá todas as linhas e colunas dos *dataframes* unificados, e onde um campo não tiver correspondência preencheremos o seu valor com zero:
+
+```{python}
+comuns = list(set(dfProdAnter.columns) & set(dfProdAtual.columns))
+dfProdUnificada = pd.merge(dfProdAnter, dfProdAtual, on=comuns, how='outer')
+dfProdUnificada.fillna(0, inplace=True)
+```
+
+Salvamos também este *dataframe* para uso posterior. 
+
+```{python}
+dfProdUnificada.to_csv(dir+"CategoriaDeAutoresPorProdução-Unificada.csv",index=False)                                     
+```
+

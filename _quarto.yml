@@ -1,0 +1,55 @@
+project:
+  type: website
+  output-dir: docs
+
+website:
+  favicon: "Resources/Images/favicon.png"
+  title: "CAPESData"
+  sidebar:
+    logo: "Resources/Images/logo.png"
+    style: "docked"
+    search: true
+    contents:
+      - text: "Sobre"
+        href: index.qmd
+      - section: "Dados do Coleta"
+        contents:
+        - text: "Obtendo os dados"
+          href: sucupira-baixando.qmd
+        - text: "Pré-processamento"
+          href: sucupira-preprocessamento.qmd
+        - text: "Análise Básica"
+          href: sucupira-producao-eda.qmd
+      # - section: "Dados Abertos"
+      #   contents:
+      #   - text: "Baixando os dados"
+      #     href: dadosabertos-baixando.qmd
+      #   - section: "Pré-processamento"
+      #     contents:
+      #     - href: dadosabertos-preprocessamento-cursos.qmd
+      #     - href: dadosabertos-preprocessamento-docentes.qmd
+      #     - href: dadosabertos-preprocessamento-discentes.qmd
+      #     - href: dadosabertos-preprocessamento-mapas.qmd
+      #     - href: dadosabertos-preprocessamento-prodint.qmd 
+      #   - section: "Análise Básica"
+      #     contents: 
+      #     - href: dadosabertos-analise-cursos.qmd
+      #   - text: "Comparações de um programa"
+      #     href: dadosabertos-comparacoesprograma.qmd
+      # - section: "Outros Dados"
+      #   contents:
+      #   - href: dados-ibge.qmd
+      # - href: galeria.qmd
+  page-footer: 
+    center: "<a href='https://linktr.ee/rafaeldcsantos'>Rafael Santos</a>" 
+#  page-navigation: true  
+    
+
+format:
+  html:
+    theme: spacelab
+    css: styles.scss
+    toc: true
+
+editor: visual
+

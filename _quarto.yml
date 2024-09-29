@@ -24,8 +24,10 @@ website:
         contents:
         - text: "Baixando os dados"
           href: dadosabertos-baixando.qmd
-        - text: "Comparativo de Idades"
-          href: dadosabertos-comparativo-idade.qmd 
+        - text: "Idades dos Docentes"
+          href: dadosabertos-comparativo-idade-docentes.qmd 
+        - text: "Idades dos Discentes"
+          href: dadosabertos-comparativo-idade-discentes.qmd 
       #   - section: "Pré-processamento"
       #     contents:
       #     - href: dadosabertos-preprocessamento-cursos.qmd

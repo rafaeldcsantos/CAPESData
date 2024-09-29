@@ -1,0 +1,470 @@
+---
+title: "Idade dos Discentes dos Programas de Pós-Graduação"
+lightbox: true
+lang: pt
+---
+
+## Sobre
+
+Este documento apresenta código e procedimentos para criar gráficos e análises comparativas sobre **a idade dos discentes dos programas de pós-graduação**.
+
+## Obtendo os dados 
+
+Primeiro verifique na seção [Dados sobre Discentes da Pós-Graduação Stricto Sensu no Brasil](dadosabertos-baixando.qmd#sec-dados-abertos-discentes) como baixar as planilhas com dados de docentes. Para os exemplos neste documento usaremos o arquivo `br-capes-colsucup-discentes-2022-2023-11-30.xlsx` (versão mais atual quando o documento foi criado).
+
+::: {.callout-important title="Atenção"}
+Os dados usados neste documento são de 2022.
+:::
+
+## Lendo e filtrando os dados 
+
+Vamos obter um *dataframe* com os dados da planilha `br-capes-colsucup-discentes-2022-2023-11-30.xlsx`, mantendo somente as colunas relevantes para os gráficos neste documento. Primeiro importamos as bibliotecas necessárias:
+
+```{python}
+import pandas as pd
+import re
+import warnings
+import plotly.express as px
+import plotly.graph_objects as go
+from datetime import datetime
+```
+
+Para facilitar a modificação do código para gerar gráficos comparando programas, regiões, áreas de avaliação e entidades de ensino vamos definir algumas constantes para filtrar os dados depois de lidos.
+
+```{python}
+arquivo = 'Resources/Data/DadosAbertos/br-capes-colsucup-discentes-2022-2023-11-30.xlsx'
+programa = '33010013002P1' # COMPUTAÇÃO APLICADA
+entidade = 33010013 # INSTITUTO NACIONAL DE PESQUISAS ESPACIAIS
+uf = 'SP'
+região = 'SUDESTE'
+área_de_avaliação = 45 # Interdisciplinar
+```
+
+Agora podemos ler a planilha, selecionar e ajustar colunas se necessário:
+
+```{python}
+# Lemos a planilha ignorando avisos.
+with warnings.catch_warnings():
+    warnings.filterwarnings("ignore", category=UserWarning, 
+                            module=re.escape('openpyxl.styles.stylesheet'))
+    df = pd.read_excel(arquivo,engine='openpyxl')
+    # Removemos os campos indesejados (especialmente as identificações dos docentes).    
+    keep = ['CD_AREA_AVALIACAO', 'NM_AREA_AVALIACAO', 'CD_PROGRAMA_IES', 'NM_PROGRAMA_IES',
+            'CD_CONCEITO_PROGRAMA', 'CD_ENTIDADE_CAPES', 
+            'SG_ENTIDADE_ENSINO', 'NM_ENTIDADE_ENSINO', 
+            'SG_UF_PROGRAMA', 'NM_REGIAO', 
+            'ID_PESSOA', 'AN_NASCIMENTO_DISCENTE', 'DS_GRAU_ACADEMICO_DISCENTE',
+            'NM_SITUACAO_DISCENTE', 'QT_MES_TITULACAO', 
+             ]
+    df = df[keep]
+
+```
+
+## Gráficos
+
+Com os dados lidos e preprocessados podemos aplicar filtros e criar os gráficos. 
+Os passos envolvem selecionar parte do *dataframe*, criar um histograma e exibir este histograma em um gráfico.
+
+O *dataframe* original contém uma coluna, `DS_FAIXA_ETARIA`, que já representa a faixa etária dos discentes, mas criaremos um novo histograma a partir do ano de nascimento para ficar mais atual e flexível.
+
+O passo de criação do histograma pode ser feito através de uma função que já pode ser definida como: 
+
+```{python}
+def dataframe_para_histograma(df):
+    ano_atual = datetime.now().year
+    # Calculamos a idade das pessoas.
+    df['Idade'] = ano_atual - df['AN_NASCIMENTO_DISCENTE']    
+    # Usamos faixas de 5 anos dos 15 aos 75 anos, e uma faixa final para mais de 75 anos.
+    faixas = [15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 120]  
+    rotulos_faixas = [f'{i}-{i+5}' for i in range(15, 75, 5)] + ['75+']  
+    # Categorizamos as idades nas faixas.
+    df['Faixa de Idade'] = pd.cut(df['Idade'], bins=faixas, 
+                                  labels=rotulos_faixas, right=False)
+    # Contamos o número de pessoas por faixa.
+    histo = df['Faixa de Idade'].value_counts().reindex(rotulos_faixas, fill_value=0)
+    # Criamos um dataframe com o histograma. Cada vaixa terá o rótulo, valores e índice.
+    df_histo = pd.DataFrame({
+        'Faixa de Idade': pd.Categorical(histo.index, categories=rotulos_faixas, ordered=True),
+        'Número': histo.values,
+        'Posição': range(len(rotulos_faixas)) 
+    })
+    return df_histo, rotulos_faixas
+```
+
+Também podemos definir uma função que cria um gráfico com o histograma, assim garantimos uma consistência visual em gráficos semelhantes:
+
+```{python}
+def cria_gráfico_histograma(df_histo,título):
+    fig = px.bar(df_histo, x='Faixa de Idade', y='Número',
+                 title=título, 
+                 category_orders={'Faixa de Idade': rotulos_faixas},
+                 color='Posição',  
+                 color_continuous_scale='Rainbow')
+    fig.update_layout(coloraxis_showscale=False)     
+    fig.update_yaxes(title_text='')      
+    return fig
+```
+
+### Distribuição da idade dos discentes do programa
+
+Vamos ver a distribuição de idades dos discentes de um programa. Primeiro filtramos o *dataframe*:
+
+```{python}
+nome_do_programa = df.loc[df['CD_PROGRAMA_IES'] == programa, 'NM_PROGRAMA_IES'].values[0]
+sigla_ies = df.loc[df['CD_PROGRAMA_IES'] == programa, 'SG_ENTIDADE_ENSINO'].values[0]
+df_programa = df[df['CD_PROGRAMA_IES'] == programa].copy()
+```
+
+Usamos a função para calcular o histograma das idades: 
+
+```{python}
+df_histo, rotulos_faixas = dataframe_para_histograma(df_programa)
+```
+
+E plotamos a distribuição em um gráfico interativo:
+
+```{python}
+# Crio e mostro o gráfico de barras.
+título = f'Distribuição de Idade de Discentes para {nome_do_programa} - {sigla_ies}'
+fig = cria_gráfico_histograma(df_histo,título)
+fig.show()
+```
+
+Devemos lembrar que os dados usados para criar este gráfico contém informações de alunos de mestrado e doutorado, e é de se esperar uma diferença de idade entre alunos nestes níveis. Faz mais sentido então criar os gráficos separados para mestrado e doutorado, filtrando novamente os dados:
+
+```{python}
+df_filtrado_mestrado = df_programa[df_programa['DS_GRAU_ACADEMICO_DISCENTE'] == 'MESTRADO'].copy()
+df_filtrado_doutorado = df_programa[df_programa['DS_GRAU_ACADEMICO_DISCENTE'] == 'DOUTORADO'].copy()
+```
+
+::: {.callout-tip title="Atenção"}
+O campo `DS_GRAU_ACADEMICO_DISCENTE` pode receber os valores 
+`MESTRADO`, 
+`DOUTORADO`, 
+`MESTRADO PROFISSIONAL` e
+`DOUTORADO PROFISSIONAL`. Ajuste os filtros dependendo dos graus que seu programa pode conferir aos alunos.
+:::
+
+Calculamos então os histogramas para cada um dos níveis:
+
+```{python}
+df_histomestrado, rotulos_faixas = dataframe_para_histograma(df_filtrado_mestrado)
+df_histodoutorado, rotulos_faixas = dataframe_para_histograma(df_filtrado_doutorado)
+```
+
+E criamos os gráficos separadamente para cada nível:
+
+```{python}
+# Crio e mostro o gráfico de barras.
+título = f'Distribuição de Idade de Mestrandos para {nome_do_programa} - {sigla_ies}'
+fig = cria_gráfico_histograma(df_histomestrado,título)
+fig.show()
+```
+
+```{python}
+# Crio e mostro o gráfico de barras.
+título = f'Distribuição de Idade de Doutorandos para {nome_do_programa} - {sigla_ies}'
+fig = cria_gráfico_histograma(df_histodoutorado,título)
+fig.show()
+```
+
+### Distribuição da idade dos discentes da IES
+
+Usando este primeiro exemplo podemos facilmente criar gráficos sobre outros filtros do *dataframe* original. Este é sobre a idade dos discentes da institução.
+
+```{python}
+nome_da_entidade = df.loc[df['CD_ENTIDADE_CAPES'] == entidade, 'NM_ENTIDADE_ENSINO'].values[0]
+
+df_filtrado = df[df['CD_ENTIDADE_CAPES'] == entidade].copy()
+df_filtrado_mestrado = df_filtrado[df_filtrado['DS_GRAU_ACADEMICO_DISCENTE'] == 'MESTRADO'].copy()
+df_filtrado_doutorado = df_filtrado[df_filtrado['DS_GRAU_ACADEMICO_DISCENTE'] == 'DOUTORADO'].copy()
+```
+
+Usamos a função para calcular os histogramas das idades por nível: 
+
+```{python}
+df_histomestrado, rotulos_faixas = dataframe_para_histograma(df_filtrado_mestrado)
+df_histodoutorado, rotulos_faixas = dataframe_para_histograma(df_filtrado_doutorado)
+```
+
+E plotamos a distribuição em dois gráficos interativos:
+
+```{python}
+# Crio e mostro o gráfico de barras.
+título = f'Distribuição de Idade de Mestrandos para {nome_da_entidade}'
+fig = cria_gráfico_histograma(df_histomestrado,título)
+fig.show()
+```
+
+```{python}
+# Crio e mostro o gráfico de barras.
+título = f'Distribuição de Idade de Doutorandos para {nome_da_entidade}'
+fig = cria_gráfico_histograma(df_histodoutorado,título)
+fig.show()
+```
+
+### Distribuição da idade dos discentes de uma determinada área de avaliação
+
+Vejamos agora como filtrar os discentes de programas vinculados a uma área de avaliação:
+
+```{python}
+nome_da_área = df.loc[df['CD_AREA_AVALIACAO'] == área_de_avaliação, 'NM_AREA_AVALIACAO'].values[0]
+df_filtrado = df[df['CD_AREA_AVALIACAO'] == área_de_avaliação].copy()
+df_filtrado_mestrado = df_filtrado[df_filtrado['DS_GRAU_ACADEMICO_DISCENTE'] == 'MESTRADO'].copy()
+df_filtrado_doutorado = df_filtrado[df_filtrado['DS_GRAU_ACADEMICO_DISCENTE'] == 'DOUTORADO'].copy()
+```
+
+Usamos a função para calcular os histogramas das idades: 
+
+```{python}
+df_histomestrado, rotulos_faixas = dataframe_para_histograma(df_filtrado_mestrado)
+df_histodoutorado, rotulos_faixas = dataframe_para_histograma(df_filtrado_doutorado)
+```
+
+E plotamos a distribuição em dois gráficos interativos:
+
+```{python}
+# Crio e mostro o gráfico de barras.
+título = f'Distribuição de Idade de Mestrandos na área {nome_da_área}'
+fig = cria_gráfico_histograma(df_histomestrado,título)
+fig.show()
+```
+
+```{python}
+# Crio e mostro o gráfico de barras.
+título = f'Distribuição de Idade de Doutorandos na área {nome_da_área}'
+fig = cria_gráfico_histograma(df_histodoutorado,título)
+fig.show()
+```
+
+
+## Gráficos comparativos
+
+Podemos fazer combinações dos gráficos mostrados acima para comparar subconjuntos do *dataframe* original. Para poder fazer alguns tipos de comparações é interessante verificar o percentual de discentes por faixa de idade em vez de usar números absolutos. Podemos modificar a função `dataframe_para_histograma` para criar também um campo com o percentual de discentes na faixa de idades:
+
+```{python}
+def dataframe_para_histograma_percentual(df_filtrado):
+    ano_atual = datetime.now().year
+    # Calculamos a idade das pessoas.
+    df_filtrado['Idade'] = ano_atual - df_filtrado['AN_NASCIMENTO_DISCENTE']
+    # Usamos faixas de 5 anos dos 20 aos 75 anos, e uma faixa final para mais de 75 anos.
+    faixas = [15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 120]  
+    rotulos_faixas = [f'{i}-{i+5}' for i in range(15, 75, 5)] + ['75+']  
+    # Categorizamos as idades nas faixas.
+    df_filtrado['Faixa de Idade'] = pd.cut(df_filtrado['Idade'], bins=faixas, 
+                                           labels=rotulos_faixas, right=False)
+    # Contamos o número de pessoas por faixa.
+    histo = df_filtrado['Faixa de Idade'].value_counts().reindex(rotulos_faixas, fill_value=0)
+    # Calculamos o total de pessoas para converter para percentagens.
+    total_pessoas = histo.sum()
+    # Criamos um dataframe com o histograma. Cada faixa terá o rótulo, valores e índice.
+    df_histo = pd.DataFrame({
+        'Faixa de Idade': pd.Categorical(histo.index, categories=rotulos_faixas, ordered=True),
+        'Número': histo.values,
+        'Percentual': (histo.values / total_pessoas) * 100,  # Percentual
+        'Posição': range(len(rotulos_faixas))  # Índice
+    })
+    return df_histo, rotulos_faixas
+```
+
+Agora que queremos comparar dois histogramas precisamos modificar a função que cria o histograma para receber um segundo histograma com os valores para comparação. O primeiro histograma (base) será plotado como visto nos exemplos anteriores, o segundo (_overlay_) como marcadores em cima do primeiro, facilitando a visualização.
+
+```{python}
+def cria_gráfico_histograma_comparativo(df_histo_base, df_histo_overlay,título):
+    fig = px.bar(df_histo_base, x='Faixa de Idade', y='Percentual',
+                 title=título, 
+                 category_orders={'Faixa de Idade': rotulos_faixas},
+                 color='Posição',  
+                 color_continuous_scale='Rainbow')
+    fig.add_trace(go.Scatter(
+        x=df_histo_overlay['Faixa de Idade'],
+        y=df_histo_overlay['Percentual'],
+        mode='markers',
+        marker=dict(
+            size=30,  
+            line=dict(width=3, color='black'), 
+            color='rgba(80,80,80,0.2)',
+            opacity=1 
+        ),        
+        showlegend = False
+    ))
+    fig.update_layout(coloraxis_showscale=False)     
+    fig.update_yaxes(title_text='', 
+                     tickvals=[0, 5, 10, 15, 20, 25, 30, 35, 40, 50, 60, 80, 100], 
+                     ticktext=['0%','5%','10%','15%','20%','25%','30%','35%','40%','50%','60%','80%','100%'])
+    return fig
+```
+
+Com estas duas funções modificadas podemos explorar vários histogramas comparativos.
+
+### Distribuição da idade dos discentes de um determinado programa _versus_ todos os discentes
+
+Vamos ver a distribuição de idade de um PPG específico comparado com todos os discentes na base de dados da CAPES (por nível). Primeiro recuperamos informações sobre o programa:
+
+```{python}
+nome_do_programa = df.loc[df['CD_PROGRAMA_IES'] == programa, 'NM_PROGRAMA_IES'].values[0]
+sigla_ies = df.loc[df['CD_PROGRAMA_IES'] == programa, 'SG_ENTIDADE_ENSINO'].values[0]
+```
+
+Criamos dois subconjuntos de dados com os discentes do programa em questão (um para mestrado e outro para doutorado):
+
+```{python}
+df_filtrado_mestrado_todos = df[df['DS_GRAU_ACADEMICO_DISCENTE'] == 'MESTRADO'].copy()
+df_filtrado_doutorado_todos = df[df['DS_GRAU_ACADEMICO_DISCENTE'] == 'DOUTORADO'].copy()
+df_filtrado_mestrado_ppg = df[(df['CD_PROGRAMA_IES'] == programa) & 
+                              (df['DS_GRAU_ACADEMICO_DISCENTE'] == 'MESTRADO')].copy()
+df_filtrado_doutorado_ppg = df[(df['CD_PROGRAMA_IES'] == programa) & 
+                               (df['DS_GRAU_ACADEMICO_DISCENTE'] == 'DOUTORADO')].copy()
+```
+
+Usamos a função para calcular os histogramas das idades de todos os programas e do subconjunto (por níveis):
+
+```{python}
+df_histo_mestrado_todos, rotulos_faixas = dataframe_para_histograma_percentual(df_filtrado_mestrado_todos)
+df_histo_doutorado_todos, rotulos_faixas = dataframe_para_histograma_percentual(df_filtrado_doutorado_todos)
+df_histo_mestrado_ppg, rotulos_faixas = dataframe_para_histograma_percentual(df_filtrado_mestrado_ppg)
+df_histo_doutorado_ppg, rotulos_faixas = dataframe_para_histograma_percentual(df_filtrado_doutorado_ppg)
+```
+
+Plotamos as distribuições em dois gráficos interativos:
+
+```{python}
+# Crio e mostro o gráfico de barras.
+título = f'Distribuição Percentual de Idade de Mestrandos - {nome_do_programa}/{sigla_ies} x todos os PPGs'
+fig = cria_gráfico_histograma_comparativo(df_histo_mestrado_todos,df_histo_mestrado_ppg,título)
+fig.show()
+```
+
+
+```{python}
+# Crio e mostro o gráfico de barras.
+título = f'Distribuição Percentual de Idade de Doutorandos - {nome_do_programa}/{sigla_ies} x todos os PPGs'
+fig = cria_gráfico_histograma_comparativo(df_histo_doutorado_todos,df_histo_doutorado_ppg,título)
+fig.show()
+```
+
+
+### Distribuição da idade dos discentes de uma IES _versus_ todos os discentes
+
+Vamos refazer o exemplo anterior mas considerando todos os discentes de uma IES/ICT. Primeiro achamos o nome da IES/ICT:
+
+```{python}
+sigla_ies = df.loc[df['CD_PROGRAMA_IES'] == programa, 'SG_ENTIDADE_ENSINO'].values[0]
+```
+
+Criamos um subconjunto de dados com os discentes da IES/ICT:
+
+```{python}
+df_filtrado_mestrado_ies = df[(df['CD_ENTIDADE_CAPES'] == entidade) & 
+                              (df['DS_GRAU_ACADEMICO_DISCENTE'] == 'MESTRADO')].copy()
+df_filtrado_doutorado_ies = df[(df['CD_ENTIDADE_CAPES'] == entidade) & 
+                               (df['DS_GRAU_ACADEMICO_DISCENTE'] == 'DOUTORADO')].copy()
+```
+
+
+Usamos a função para calcular o histograma das idades de todos os discentes da IES/ICT e do conjunto geral:
+
+```{python}
+df_histo_mestrado_ies, rotulos_faixas = dataframe_para_histograma_percentual(df_filtrado_mestrado_ies)
+df_histo_doutorado_ies, rotulos_faixas = dataframe_para_histograma_percentual(df_filtrado_doutorado_ies)
+```
+
+Plotamos as distribuições em dois gráficos interativos:
+
+```{python}
+# Crio e mostro o gráfico de barras.
+título = f'Distribuição Percentual de Idade de Mestrandos - {sigla_ies} x todos os PPGs'
+fig = cria_gráfico_histograma_comparativo(df_histo_mestrado_todos,df_histo_mestrado_ies,título)
+fig.show()
+```
+
+```{python}
+# Crio e mostro o gráfico de barras.
+título = f'Distribuição Percentual de Idade de Doutorandos - {sigla_ies} x todos os PPGs'
+fig = cria_gráfico_histograma_comparativo(df_histo_doutorado_todos,df_histo_doutorado_ies,título)
+fig.show()
+```
+
+### Distribuição da idade dos discentes de uma determinada área de avaliação _versus_ todos os discentes
+
+Preparamos o título para o subconjunto:
+
+```{python}
+nome_da_área = df.loc[df['CD_AREA_AVALIACAO'] == área_de_avaliação, 'NM_AREA_AVALIACAO'].values[0]
+```
+
+Criamos um subconjunto de dados com os discentes de PPGs da área:
+
+```{python}
+df_filtrado_mestrado_area = df[(df['CD_AREA_AVALIACAO'] == área_de_avaliação) & 
+                               (df['DS_GRAU_ACADEMICO_DISCENTE'] == 'MESTRADO')].copy()
+df_filtrado_doutorado_area = df[(df['CD_AREA_AVALIACAO'] == área_de_avaliação) & 
+                                (df['DS_GRAU_ACADEMICO_DISCENTE'] == 'DOUTORADO')].copy()
+```
+
+Usamos a função para calcular o histograma das idades de todos os discentes de PPGs da área e do conjunto geral:
+
+```{python}
+df_histo_mestrado_area, rotulos_faixas = dataframe_para_histograma_percentual(df_filtrado_mestrado_area)
+df_histo_doutorado_area, rotulos_faixas = dataframe_para_histograma_percentual(df_filtrado_doutorado_area)
+```
+
+Plotamos as distribuições em dois gráficos interativos:
+
+```{python}
+# Crio e mostro o gráfico de barras.
+título = f'Distribuição Percentual de Idade de Mestrandos - {nome_da_área} x todos os PPGs'
+fig = cria_gráfico_histograma_comparativo(df_histo_mestrado_todos,df_histo_mestrado_area,título)
+fig.show()
+```
+
+```{python}
+# Crio e mostro o gráfico de barras.
+título = f'Distribuição Percentual de Idade de Doutorandos - {nome_da_área} x todos os PPGs'
+fig = cria_gráfico_histograma_comparativo(df_histo_doutorado_todos,df_histo_doutorado_area,título)
+fig.show()
+```
+
+## Mais gráficos (em lote)
+
+As funções e trechos de código neste documento podem ser adaptadas para criar gráficos em lote.
+
+Primeiro vamos verificar os códigos de programas de pós-graduação associados a uma IES/ICT (dado seu código):
+
+```{python}
+lista_entidades = df[df['CD_ENTIDADE_CAPES'] == entidade]
+ppgs_da_entidade = lista_entidades['CD_PROGRAMA_IES'].unique()
+lista_ppgs_da_entidade = ppgs_da_entidade.tolist()
+```
+
+Com esta lista posso criar um gráfico para cada programa, comparando as idades dos discentes daquele programa com os de suas áreas de avaliação:
+
+```{python}
+for programa in lista_ppgs_da_entidade:
+    # Crio um subconjunto para o programa ignorando se tem mestrado e/ou doutorado.
+    # Será usado para recuperar informações sobre o programa e área.
+    df_filtrado_ppg = df[(df['CD_PROGRAMA_IES'] == programa)].copy()
+    # Recuperamos o nome do programa e de sua área de avaliação:
+    nm_programa = df_filtrado_ppg['NM_PROGRAMA_IES'].iloc[0]
+    cd_area_avaliacao = df_filtrado_ppg['CD_AREA_AVALIACAO'].iloc[0]
+    nm_area_avaliacao = df_filtrado_ppg['NM_AREA_AVALIACAO'].iloc[0]
+    # Recuperamos os níveis oferecidos:
+    níveis = df_filtrado_ppg['DS_GRAU_ACADEMICO_DISCENTE'].unique().tolist()
+    for nível in níveis:
+        # Crio um subconjunto e histograma para o nível considerando todos os programas da área:
+        df_filtrado_nível_área = df[(df['CD_AREA_AVALIACAO'] == cd_area_avaliacao) & 
+                                   (df['DS_GRAU_ACADEMICO_DISCENTE'] == nível)].copy()
+        df_histo_nível_área, rotulos_faixas = dataframe_para_histograma_percentual(df_filtrado_nível_área)
+        # Crio um subconjunto e histograma para o nível considerando somente este programa:
+        df_filtrado_nível_ppg = df[(df['CD_PROGRAMA_IES'] == programa) & 
+                                   (df['DS_GRAU_ACADEMICO_DISCENTE'] == nível)].copy()
+        df_histo_nível_ppg, rotulos_faixas = dataframe_para_histograma_percentual(df_filtrado_nível_ppg)
+        # Crio o gráfico comparativo.
+        título = f'Idade de Discentes {nível} em {nm_programa} x {nm_area_avaliacao}'
+        fig = cria_gráfico_histograma_comparativo(df_histo_nível_área, df_histo_nível_ppg, título)
+        fig.update_layout(margin=dict(t=50, b=100)) 
+        fig.show()       
+ 
+
+
+```

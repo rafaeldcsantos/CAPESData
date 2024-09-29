@@ -20,17 +20,18 @@ website:
           href: sucupira-preprocessamento.qmd
         - text: "Análise Básica"
           href: sucupira-producao-eda.qmd
-      # - section: "Dados Abertos"
-      #   contents:
-      #   - text: "Baixando os dados"
-      #     href: dadosabertos-baixando.qmd
+      - section: "Dados Abertos"
+        contents:
+        - text: "Baixando os dados"
+          href: dadosabertos-baixando.qmd
+        - text: "Comparativo de Idades"
+          href: dadosabertos-comparativo-idade.qmd 
       #   - section: "Pré-processamento"
       #     contents:
       #     - href: dadosabertos-preprocessamento-cursos.qmd
       #     - href: dadosabertos-preprocessamento-docentes.qmd
       #     - href: dadosabertos-preprocessamento-discentes.qmd
       #     - href: dadosabertos-preprocessamento-mapas.qmd
-      #     - href: dadosabertos-preprocessamento-prodint.qmd 
       #   - section: "Análise Básica"
       #     contents: 
       #     - href: dadosabertos-analise-cursos.qmd
@@ -39,7 +40,7 @@ website:
       # - section: "Outros Dados"
       #   contents:
       #   - href: dados-ibge.qmd
-      # - href: galeria.qmd
+      - href: galeria.qmd
   page-footer: 
     center: "<a href='https://linktr.ee/rafaeldcsantos'>Rafael Santos</a>" 
 #  page-navigation: true  

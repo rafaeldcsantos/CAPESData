@@ -1,6 +1,0 @@
----
-title: "Pré-Processamento dos Dados - Discentes"
-lightbox: true
-lang: pt
----
-## Sobre

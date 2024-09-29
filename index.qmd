@@ -40,6 +40,6 @@ Sucupira (Plataforma Sucupira)
 
 Se seu objetivo é analisar dados da CAPES, em especial de programas de pós-graduação, existem várias alternativas que não envolvem programação e/ou cópias locais das bases de dados. Algumas são:
 
-* A nova versão da [Plataforma Sucupira](https://sucupira-v2.capes.gov.br/sucupira4/) que contém relatórios sobre cursos avaliados e reconhecidos e o Observatório da pós-graduação.
+* A nova versão da [Plataforma Sucupira](https://sucupira-v2.capes.gov.br/sucupira4/) que contém relatórios sobre cursos avaliados e reconhecidos e o [Observatório da Pós-graduação](https://sucupira-v2.capes.gov.br/#busca_observatorio).
 * O [Sistema Tarrafa](https://tarrafa.unimontes.br/), desenvolvido pela [Unimontes -- Universidade Estadual de Montes Claros](https://unimontes.br/), que usa dados da CAPES e CNPq para criar relatórios complexos e comparativos entre programas de pós-graduação.
 

@@ -1,7 +1,0 @@
----
-title: "Pré-Processamento dos Dados - Produção Intelectual (Artigos)"
-lightbox: true
-lang: pt
----
-## Sobre
-

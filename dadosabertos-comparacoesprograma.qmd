@@ -1,6 +1,0 @@
----
-title: "Comparações entre Programas"
-lightbox: true
-lang: pt
----
-## Sobre

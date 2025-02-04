@@ -283,7 +283,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="bibliotecas-usadas" class="level3">
 <h3 class="anchored" data-anchor-id="bibliotecas-usadas">Bibliotecas usadas</h3>
 <p>Usaremos Python para este preprocessamento. Primeiro importamos as bibliotecas necessárias:</p>
-<div id="2a6b35d1" class="cell" data-execution_count="1">
+<div id="d2d87fa5" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> glob</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> re</span>
@@ -295,7 +295,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="reorganizando-as-produções-intelectuais---contando-categorias-de-autores" class="level2">
 <h2 class="anchored" data-anchor-id="reorganizando-as-produções-intelectuais---contando-categorias-de-autores">Reorganizando as Produções Intelectuais - Contando Categorias de Autores</h2>
 <p>Queremos um conjunto de dados com uma publicação por registro e com contagem de autores por categorias. Para cada planilha vamos ler a aba <code>Produção Intelectual</code>, filtrar alguns campos que não são necessários e separar somente as linhas que tem nomes de autores. Como repetiremos estes passos para cada planilha é melhor definir uma função em Python que recebe o nome do arquivo e retorna um <em>dataframe</em> com os campos e linhas que precisamos:</p>
-<div id="11f711bb" class="cell" data-execution_count="2">
+<div id="ed48788e" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> preprocessaProducoesParaCategorias(fileName):</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Lemos a planilha.</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> warnings.catch_warnings():</span>
@@ -315,38 +315,38 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p>A biblioteca usada para a leitura de planilhas gera advertências no código, para isto usamos filtros de alertas (veja mais detalhes <a href="https://stackoverflow.com/questions/66214951/deal-with-openpyxl-warning-workbook-contains-no-default-style-apply-openpyxl/77942784">aqui</a>).</p>
 <p>Os dados que precisamos estão todos armazenados em planilhas, uma por ano, em um diretório (a lista de planilhas para este documento pode ser vista <a href="./sucupira-baixando.html#arquivos-baixados-neste-exemplo">aqui</a>):</p>
-<div id="63542af3" class="cell" data-execution_count="3">
+<div id="c94fcf2a" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="bu">dir</span> <span class="op">=</span> <span class="st">"Resources/Data/ColetaSucupira/"</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Podemos então criar uma lista de arquivos com nomes semelhantes no diretório indicado e uma lista de <em>dataframes</em> para receber os dados:</p>
-<div id="cd83b86c" class="cell" data-execution_count="4">
+<div id="0271987f" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>fileNames <span class="op">=</span> glob.glob(<span class="bu">dir</span><span class="op">+</span><span class="st">"relatorio_dados_enviados_coleta_20??.xlsx"</span>)</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>dfs <span class="op">=</span> []</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Agora podemos ler cada um destes arquivos, filtrar linhas e colunas e anexar o <em>dataframe</em> filtrado à lista de <em>dataframes</em>:</p>
-<div id="2f11102c" class="cell" data-execution_count="5">
+<div id="29792b81" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> <span class="bu">file</span> <span class="kw">in</span> fileNames:</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    df <span class="op">=</span> preprocessaProducoesParaCategorias(<span class="bu">file</span>)</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    dfs.append(df)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Em uma linha concatenaremos todos os <em>dataframes</em> da produção intelectual do conjunto de planilhas:</p>
-<div id="65138cae" class="cell" data-execution_count="6">
+<div id="614f52f0" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>dfconcatenado <span class="op">=</span> pd.concat(dfs, ignore_index<span class="op">=</span><span class="va">True</span>)    </span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Devemos manter somente as produções que <strong>não</strong> foram glosadas:</p>
-<div id="81d524a6" class="cell" data-execution_count="7">
+<div id="ec1b1d0e" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>dfconcatenado <span class="op">=</span> dfconcatenado[dfconcatenado[<span class="st">'Produção Glosada?'</span>] <span class="op">==</span> <span class="st">'Não'</span>]</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>dfconcatenado.drop(columns<span class="op">=</span>[<span class="st">'Produção Glosada?'</span>], inplace<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Agora temos todas as produções intelectuais de todos os anos que foram coletados na Plataforma Sucupira sobre nosso programa de pós-graduação. Mas estes dados ainda não estão prontos para a análise que queremos fazer: cada registro no <em>dataframe</em> contém informação sobre uma produção e um autor, portanto uma produção com quatro autores está representada em quatro registros.</p>
 <p>Podemos entender melhor este <em>dataframe</em> temporário criando um subconjunto dele contendo somente registros do artigo <em>“A PLATFORM FOR LAND USE AND LAND COVER DATA INTEGRATION AND TRAJECTORY ANALYSIS”</em>. Vamos também remover algumas colunas da amostra para facilitar a visualização):</p>
-<div id="f6fd5d79" class="cell" data-execution_count="8">
+<div id="871db6f4" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>dfamostra <span class="op">=</span> dfconcatenado.loc[dfconcatenado[<span class="st">'Título da Produção'</span>] <span class="op">==</span> </span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>           <span class="st">'A PLATFORM FOR LAND USE AND LAND COVER DATA INTEGRATION AND TRAJECTORY ANALYSIS'</span>]</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>dfamostra <span class="op">=</span> dfamostra.drop(columns<span class="op">=</span>[<span class="st">'Área de Concentração'</span>,<span class="st">'Linha de Pesquisa'</span>,<span class="st">'Projeto de Pesquisa'</span>])</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>A amostra do <em>dataframe</em> pode ser visualizado com o código abaixo:</p>
-<div id="d1954f65" class="cell" data-execution_count="9">
+<div id="11a3ff8d" class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>Markdown(dfamostra.to_markdown(index<span class="op">=</span><span class="va">False</span>))</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display cell-output-markdown" data-execution_count="9">
 <table class="table table-sm table-striped small">
@@ -438,7 +438,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p>A tabela acima mostra que os valores dos campos <code>Título da Produção</code>, <code>Tipo da Produção</code> e <code>Subtipo da Produção</code> são os mesmos para a produção. Cada autor da produção aparece em um registro do <em>dataframe</em> com sua categoria. O que precisamos, para esta análise, é saber para cada produção quantos autores de cada categoria temos. Para isto precisamos do código a seguir:</p>
-<div id="67db5988" class="cell" data-execution_count="10">
+<div id="47d213c8" class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>dfProdAnter <span class="op">=</span> dfamostra.pivot_table(index<span class="op">=</span>[<span class="st">'Ano da Produção'</span>, <span class="st">'Título da Produção'</span>, </span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>                                           <span class="st">'Tipo da Produção'</span>, <span class="st">'Subtipo da Produção'</span>],</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>                                           columns<span class="op">=</span><span class="st">'Categoria do Autor'</span>,</span>
@@ -448,7 +448,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p>O código acima cria um novo <em>dataframe</em> a partir da amostra usando como identificador único das produção uma combinação dos campos <code>Ano da Produção</code>, <code>Título da Produção</code>, <code>Tipo da Produção</code> e <code>Subtipo da Produção</code>; criando novos campos com os valores presentes na coluna <code>Categoria do Autor</code> e contando os nomes em cada categoria para cada identificador único. Campos com contagem inexistente serão preenchidos com zeros.</p>
 <p>Podemos visualizar o resultado na tabela abaixo.</p>
-<div id="59d3b8ef" class="cell" data-execution_count="11">
+<div id="995ead57" class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>Markdown(dfProdAnter.to_markdown(index<span class="op">=</span><span class="va">False</span>))</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display cell-output-markdown" data-execution_count="11">
 <table class="table table-sm table-striped small">
@@ -490,7 +490,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p>Com o resultado comprovado podemos criar um <em>dataframe</em> que indica quantos autores por categoria para cada produção temos na base inteira.</p>
-<div id="485906bc" class="cell" data-execution_count="12">
+<div id="d2c5fa10" class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>dfProdAnter <span class="op">=</span> dfconcatenado.pivot_table(index<span class="op">=</span>[<span class="st">'Ano da Produção'</span>, <span class="st">'Título da Produção'</span>, </span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>                                               <span class="st">'Tipo da Produção'</span>, <span class="st">'Subtipo da Produção'</span>],</span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>                                               columns<span class="op">=</span><span class="st">'Categoria do Autor'</span>,</span>
@@ -499,15 +499,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>                                               fill_value<span class="op">=</span><span class="dv">0</span>).reset_index()</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Vamos renomear o campo <code>Egresso - null</code>, criado pelos procedimentos anteriores a partir dos valores do campo <code>Categoria do Autor</code>.</p>
-<div id="b756266a" class="cell" data-execution_count="13">
+<div id="fb20e663" class="cell" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>dfProdAnter.rename(columns<span class="op">=</span>{<span class="st">'Egresso - null'</span>: <span class="st">'Egresso'</span>}, inplace<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Vamos também armazenar este <em>dataframe</em> em um arquivo para uso posterior.</p>
-<div id="a9bb67f7" class="cell" data-execution_count="14">
+<div id="3c3b35c4" class="cell" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>dfProdAnter.to_csv(<span class="bu">dir</span><span class="op">+</span><span class="st">"CategoriaDeAutoresPorProdução-AnosAnteriores.csv"</span>,index<span class="op">=</span><span class="va">False</span>)                                     </span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Vejamos os primeiros cinco registros deste novo <em>dataframe</em>:</p>
-<div id="4339371e" class="cell" data-execution_count="15">
+<div id="b97b1fd2" class="cell" data-execution_count="15">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>Markdown(dfProdAnter.head(<span class="dv">5</span>).to_markdown(index<span class="op">=</span><span class="va">False</span>))</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display cell-output-markdown" data-execution_count="15">
 <table class="table table-sm table-striped small">
@@ -617,7 +617,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><a href="Resources/Images/Sucupira-planilha-detalhe-ano-atual.webp" class="lightbox" data-gallery="quarto-lightbox-gallery-4"><img src="Resources/Images/Sucupira-planilha-detalhe-ano-atual.webp" class="img-fluid"></a></p>
 <p>Nesta seção iremos formatar estes dados de forma a deixá-los compatíveis com os que foram coletados nos anos passados.</p>
 <p>Depois de <a href="./sucupira-baixando.html#dados-do-preenchimento-do-ano-corrente">baixar a planilha com dados do ano corrente</a> e renomeá-la adequadamente podemos usar o código abaixo para ler a única aba (<code>Produções - Autores</code>) em um <em>dataframe</em>.</p>
-<div id="784b9c71" class="cell" data-execution_count="16">
+<div id="26e8283a" class="cell" data-execution_count="16">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>filename <span class="op">=</span> <span class="st">"ListaReplicadaComAutores.xls"</span></span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> warnings.catch_warnings():</span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>     warnings.filterwarnings(<span class="st">"ignore"</span>, category<span class="op">=</span><span class="pp">UserWarning</span>, </span>
@@ -625,19 +625,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>     df <span class="op">=</span> pd.read_excel(<span class="bu">dir</span><span class="op">+</span>filename,engine<span class="op">=</span><span class="st">'openpyxl'</span>,sheet_name<span class="op">=</span><span class="st">'Produções - Autores'</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Para eliminar as colunas do <em>dataframe</em> que não serão necessárias usamos o código a seguir:</p>
-<div id="61f85fbc" class="cell" data-execution_count="17">
+<div id="61e59ad8" class="cell" data-execution_count="17">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>keep <span class="op">=</span> [<span class="st">'Ano da Produção'</span>,<span class="st">'Nome da Produção'</span>,<span class="st">'Tipo de Produção'</span>,</span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>        <span class="st">'Subtipo de Produção'</span>,<span class="st">'Nome do Autor'</span>,<span class="st">'Categoria do Autor'</span>]</span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> df.drop(columns<span class="op">=</span>[col <span class="cf">for</span> col <span class="kw">in</span> df.columns <span class="cf">if</span> col <span class="kw">not</span> <span class="kw">in</span> keep])</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Outro passo no processamento dos dados da planilha das produções do ano corrente é renomear algumas colunas para que fiquem compatíveis com as planilhas das produções dos anos anteriores.</p>
-<div id="2e4c586e" class="cell" data-execution_count="18">
+<div id="f696c120" class="cell" data-execution_count="18">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>df.rename(columns<span class="op">=</span>{<span class="st">'Nome da Produção'</span>: <span class="st">'Título da Produção'</span>, </span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>                   <span class="st">'Tipo de Produção'</span>: <span class="st">'Tipo da Produção'</span>, </span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>                   <span class="st">'Subtipo de Produção'</span>: <span class="st">'Subtipo da Produção'</span>}, inplace<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Podemos reorganizar o <em>dataframe</em> para conter somente uma publicação por linha e com a contagem de autores por categorias com o código abaixo:</p>
-<div id="d21f6c2c" class="cell" data-execution_count="19">
+<div id="c6abcaca" class="cell" data-execution_count="19">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>dfProdAtual <span class="op">=</span> df.pivot_table(index<span class="op">=</span>[<span class="st">'Ano da Produção'</span>, <span class="st">'Título da Produção'</span>, </span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">'Tipo da Produção'</span>, <span class="st">'Subtipo da Produção'</span>],</span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>                                    columns<span class="op">=</span><span class="st">'Categoria do Autor'</span>,</span>
@@ -646,7 +646,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>                                    fill_value<span class="op">=</span><span class="dv">0</span>).reset_index()</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Finalmente armazenamos este <em>dataframe</em> para uso posterior.</p>
-<div id="c858fe9e" class="cell" data-execution_count="20">
+<div id="d53d876d" class="cell" data-execution_count="20">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>dfProdAtual.to_csv(<span class="bu">dir</span><span class="op">+</span><span class="st">"CategoriaDeAutoresPorProdução-AnoCorrente.csv"</span>,index<span class="op">=</span><span class="va">False</span>)                                     </span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
@@ -654,18 +654,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h3 class="anchored" data-anchor-id="unificando-as-bases-de-dados-de-produções-intelectuais">Unificando as bases de dados de Produções Intelectuais</h3>
 <p>Neste ponto temos duas bases de dados: <code>CategoriaDeAutoresPorProdução-AnosAnteriores.csv</code> e <code>CategoriaDeAutoresPorProdução-AnoCorrente.csv</code>. Embora as duas representem basicamente as mesmas informações, o formato é ligeiramente diferente na ordem das colunas e nos campos, que podem ser diferentes dependendo das categorias de coautores presentes nas planilhas originais. O código nesta seção ajusta e unifica os dados.</p>
 <p>A planilha com os dados de anos anteriores diferencia entre coautores de categorias <code>Discente - Mestrado</code> e <code>Discente - Doutorado</code>, mas a do ano atual não. Devemos então unificar as colunas <code>Discente - Mestrado</code> e <code>Discente - Doutorado</code> do <em>dataframe</em> contendo a produção intelectual dos anos anteriores, armazenando a soma na coluna nova <code>Discente</code>.</p>
-<div id="f257bae5" class="cell" data-execution_count="21">
+<div id="5c0a6ed2" class="cell" data-execution_count="21">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>dfProdAnter <span class="op">=</span> dfProdAnter.assign(Discente<span class="op">=</span><span class="kw">lambda</span> x: x[<span class="st">'Discente - Doutorado'</span>] <span class="op">+</span> x[<span class="st">'Discente - Mestrado'</span>])</span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>dfProdAnter <span class="op">=</span> dfProdAnter.drop(columns<span class="op">=</span>[<span class="st">'Discente - Doutorado'</span>, <span class="st">'Discente - Mestrado'</span>])</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Com isto posso unificar os <em>dataframes</em> contendo a produção intelectual dos anos anteriores e a do ano atual. O <em>dataframe</em> resultante receberá todas as linhas e colunas dos <em>dataframes</em> unificados, e onde um campo não tiver correspondência preencheremos o seu valor com zero:</p>
-<div id="7840d131" class="cell" data-execution_count="22">
+<div id="6f09e380" class="cell" data-execution_count="22">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>comuns <span class="op">=</span> <span class="bu">list</span>(<span class="bu">set</span>(dfProdAnter.columns) <span class="op">&amp;</span> <span class="bu">set</span>(dfProdAtual.columns))</span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>dfProdUnificada <span class="op">=</span> pd.merge(dfProdAnter, dfProdAtual, on<span class="op">=</span>comuns, how<span class="op">=</span><span class="st">'outer'</span>)</span>
 <span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>dfProdUnificada.fillna(<span class="dv">0</span>, inplace<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Salvamos também este <em>dataframe</em> para uso posterior.</p>
-<div id="fdd2faf9" class="cell" data-execution_count="23">
+<div id="d54201c5" class="cell" data-execution_count="23">
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>dfProdUnificada.to_csv(<span class="bu">dir</span><span class="op">+</span><span class="st">"CategoriaDeAutoresPorProdução-Unificada.csv"</span>,index<span class="op">=</span><span class="va">False</span>)                                     </span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
@@ -674,7 +674,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="reorganizando-as-produções-intelectuais---autores-como-lista">Reorganizando as Produções Intelectuais - Autores como Lista</h2>
 <p>Queremos também obter um conjunto de dados com uma publicação por registro e com os nomes e categorias de autores representados como uma lista formatada como uma string. Para cada planilha vamos ler a aba Produção Intelectual e tratar as múltiplas linhas que contém informações sobre os autores e publicação para criar a nova estrutura.</p>
 <p>Vamos também usar uma função em Python para fazer isto:</p>
-<div id="23f3b86b" class="cell" data-execution_count="24">
+<div id="ee24cd13" class="cell" data-execution_count="24">
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> preprocessaProducoesParaAutores(fileName):</span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Lemos a planilha</span></span>
 <span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> warnings.catch_warnings():</span>
@@ -741,28 +741,28 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p>Algumas definições usadas no <a href="./sucupira-preprocessamento.html#reorganizando-as-produções-intelectuais---contando-categorias-de-autores">primeiro exemplo</a> são repetidas aqui para maior clareza.</p>
 <p>Primeiro criamos a lista de arquivos a serem lidos e uma lista de <em>dataframes</em> para receber os dados:</p>
-<div id="68207ce8" class="cell" data-execution_count="25">
+<div id="9827e3cd" class="cell" data-execution_count="25">
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="bu">dir</span> <span class="op">=</span> <span class="st">"Resources/Data/ColetaSucupira/"</span></span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>fileNames <span class="op">=</span> glob.glob(<span class="bu">dir</span><span class="op">+</span><span class="st">"relatorio_dados_enviados_coleta_20??.xlsx"</span>)</span>
 <span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>dfs <span class="op">=</span> []</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Lemos cada um destes arquivos pela função que preprocessa e criamos um <em>dataframe</em> com uma linha para cada publicação:</p>
-<div id="362313af" class="cell" data-execution_count="26">
+<div id="bc9533fc" class="cell" data-execution_count="26">
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> <span class="bu">file</span> <span class="kw">in</span> fileNames:</span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>    df <span class="op">=</span> preprocessaProducoesParaAutores(<span class="bu">file</span>)</span>
 <span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>    dfs.append(df)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Concatenamos todos os <em>dataframes</em> criados:</p>
-<div id="638b9730" class="cell" data-execution_count="27">
+<div id="83128153" class="cell" data-execution_count="27">
 <div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>dfconcatenado <span class="op">=</span> pd.concat(dfs, ignore_index<span class="op">=</span><span class="va">True</span>)  </span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Para verificar o <em>dataframe</em> vamos criar uma amostra contendo somente registros do artigo <em>“A PLATFORM FOR LAND USE AND LAND COVER DATA INTEGRATION AND TRAJECTORY ANALYSIS”</em>.</p>
-<div id="6057e217" class="cell" data-execution_count="28">
+<div id="abf237ff" class="cell" data-execution_count="28">
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>dfamostra <span class="op">=</span> dfconcatenado.loc[dfconcatenado[<span class="st">'Título da Produção'</span>] <span class="op">==</span> </span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>           <span class="st">'A PLATFORM FOR LAND USE AND LAND COVER DATA INTEGRATION AND TRAJECTORY ANALYSIS'</span>]</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>A visualização deve mostrar a estrutura esperada (uma publicação por linha; autores e categorias concatenados):</p>
-<div id="232ca121" class="cell" data-execution_count="29">
+<div id="4e7a39d4" class="cell" data-execution_count="29">
 <div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>Markdown(dfamostra.to_markdown(index<span class="op">=</span><span class="va">False</span>))</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display cell-output-markdown" data-execution_count="29">
 <table class="table table-sm table-striped small">
@@ -819,66 +819,63 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h3 class="anchored" data-anchor-id="complementando-com-dados-de-produções-do-ano-corrente-1">Complementando com dados de produções do ano corrente</h3>
 <p>A <a href="./sucupira-baixando.html#dados-do-preenchimento-do-ano-corrente">planilha com dados do ano corrente</a> (o que está em preenchimento na Plataforma Sucupira ou que foi enviada no ano) tem um formato ligeiramente diferente do das planilhas dos anos já preenchidos. Comparando com as planilhas de anos passados, veremos que muitos campos não tem correspondência (por exemplo, <code>Glosada</code>, <code>ISSN</code>, <code>DOI</code>, <code>URL</code>, <code>Idioma</code>). Mesmo assim tentaremos ler esta planilha, com os dados que forem compatíveis com as dos anos anteriores.</p>
 <p>Vamos criar uma função semelhante a <code>preprocessaProducoesParaAutores</code> para ler a planilha do ano atual. Esta função vai criar campos vazios, mas compatíveis com o <em>dataframe</em> retornado pela função <code>preprocessaProducoesParaAutores</code>:</p>
-<div id="b12387b5" class="cell" data-execution_count="30">
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> preprocessaProducoesParaAutores_Atual(file_path):</span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Carregar planilha</span></span>
-<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>    df <span class="op">=</span> pd.read_excel(file_path, sheet_name<span class="op">=</span><span class="st">"Produções - Autores"</span>)</span>
-<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Criar dicionário para armazenar os dados estruturados</span></span>
-<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>    producoes <span class="op">=</span> {}</span>
+<div id="662a9483" class="cell" data-execution_count="30">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> preprocessaProducoesParaAutores_Atual(fileName):</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Lemos a planilha</span></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> warnings.catch_warnings():</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>        warnings.filterwarnings(<span class="st">"ignore"</span>, category<span class="op">=</span><span class="pp">UserWarning</span>, </span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>                                module<span class="op">=</span>re.escape(<span class="st">'openpyxl.styles.stylesheet'</span>))</span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>        df <span class="op">=</span> pd.read_excel(fileName,engine<span class="op">=</span><span class="st">'openpyxl'</span>,sheet_name<span class="op">=</span><span class="st">'Produções - Autores'</span>)  </span>
 <span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> _, row <span class="kw">in</span> df.iterrows():</span>
-<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a>        titulo <span class="op">=</span> row[<span class="st">"Nome da Produção"</span>]</span>
-<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a>        </span>
-<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> pd.notna(titulo):</span>
-<span id="cb30-12"><a href="#cb30-12" aria-hidden="true" tabindex="-1"></a>            <span class="co"># Criar nova entrada se for um título novo</span></span>
-<span id="cb30-13"><a href="#cb30-13" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> titulo <span class="kw">not</span> <span class="kw">in</span> producoes:</span>
-<span id="cb30-14"><a href="#cb30-14" aria-hidden="true" tabindex="-1"></a>                producoes[titulo] <span class="op">=</span> {</span>
-<span id="cb30-15"><a href="#cb30-15" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"Ano da Produção"</span>: row[<span class="st">"Ano da Produção"</span>],</span>
-<span id="cb30-16"><a href="#cb30-16" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"Título da Produção"</span>: titulo, </span>
-<span id="cb30-17"><a href="#cb30-17" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"Glosada"</span>: <span class="st">""</span>, </span>
-<span id="cb30-18"><a href="#cb30-18" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"ISSN"</span>: <span class="st">""</span>,</span>
-<span id="cb30-19"><a href="#cb30-19" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"Título do Periódico"</span>: <span class="st">""</span>,                    </span>
-<span id="cb30-20"><a href="#cb30-20" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"DOI"</span>: <span class="st">""</span>,</span>
-<span id="cb30-21"><a href="#cb30-21" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"URL"</span>: <span class="st">""</span>,</span>
-<span id="cb30-22"><a href="#cb30-22" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"Tipo"</span>: row[<span class="st">"Tipo de Produção"</span>],</span>
-<span id="cb30-23"><a href="#cb30-23" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"Subtipo"</span>: row[<span class="st">"Subtipo de Produção"</span>],</span>
-<span id="cb30-24"><a href="#cb30-24" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"Idioma"</span>: <span class="st">""</span>,</span>
-<span id="cb30-25"><a href="#cb30-25" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"Autores"</span>: [],</span>
-<span id="cb30-26"><a href="#cb30-26" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"Categorias"</span>: []</span>
-<span id="cb30-27"><a href="#cb30-27" aria-hidden="true" tabindex="-1"></a>                }</span>
-<span id="cb30-28"><a href="#cb30-28" aria-hidden="true" tabindex="-1"></a>        </span>
-<span id="cb30-29"><a href="#cb30-29" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Se a linha contiver um autor, adiciona à lista da produção correta</span></span>
-<span id="cb30-30"><a href="#cb30-30" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> pd.notna(row[<span class="st">"Nome do Autor"</span>]):</span>
-<span id="cb30-31"><a href="#cb30-31" aria-hidden="true" tabindex="-1"></a>            producoes[titulo][<span class="st">"Autores"</span>].append(row[<span class="st">"Nome do Autor"</span>].strip())</span>
-<span id="cb30-32"><a href="#cb30-32" aria-hidden="true" tabindex="-1"></a>            producoes[titulo][<span class="st">"Categorias"</span>].append(row[<span class="st">"Categoria do Autor"</span>].strip())</span>
-<span id="cb30-33"><a href="#cb30-33" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb30-34"><a href="#cb30-34" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Converter listas de autores e categorias para strings</span></span>
-<span id="cb30-35"><a href="#cb30-35" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> titulo <span class="kw">in</span> producoes:</span>
-<span id="cb30-36"><a href="#cb30-36" aria-hidden="true" tabindex="-1"></a>        producoes[titulo][<span class="st">"Autores"</span>] <span class="op">=</span> <span class="st">"; "</span>.join(producoes[titulo][<span class="st">"Autores"</span>])</span>
-<span id="cb30-37"><a href="#cb30-37" aria-hidden="true" tabindex="-1"></a>        producoes[titulo][<span class="st">"Categorias"</span>] <span class="op">=</span> <span class="st">"; "</span>.join(producoes[titulo][<span class="st">"Categorias"</span>])</span>
-<span id="cb30-38"><a href="#cb30-38" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb30-39"><a href="#cb30-39" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Converter para DataFrame</span></span>
-<span id="cb30-40"><a href="#cb30-40" aria-hidden="true" tabindex="-1"></a>    df_final <span class="op">=</span> pd.DataFrame(producoes.values())</span>
-<span id="cb30-41"><a href="#cb30-41" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> df_final</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Criar dicionário para armazenar os dados estruturados</span></span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a>    producoes <span class="op">=</span> {}</span>
+<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> _, row <span class="kw">in</span> df.iterrows():</span>
+<span id="cb30-12"><a href="#cb30-12" aria-hidden="true" tabindex="-1"></a>        titulo <span class="op">=</span> row[<span class="st">"Nome da Produção"</span>]</span>
+<span id="cb30-13"><a href="#cb30-13" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb30-14"><a href="#cb30-14" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> pd.notna(titulo):</span>
+<span id="cb30-15"><a href="#cb30-15" aria-hidden="true" tabindex="-1"></a>            <span class="co"># Criar nova entrada se for um título novo</span></span>
+<span id="cb30-16"><a href="#cb30-16" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> titulo <span class="kw">not</span> <span class="kw">in</span> producoes:</span>
+<span id="cb30-17"><a href="#cb30-17" aria-hidden="true" tabindex="-1"></a>                producoes[titulo] <span class="op">=</span> {</span>
+<span id="cb30-18"><a href="#cb30-18" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"Ano da Produção"</span>: row[<span class="st">"Ano da Produção"</span>],</span>
+<span id="cb30-19"><a href="#cb30-19" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"Título da Produção"</span>: titulo, </span>
+<span id="cb30-20"><a href="#cb30-20" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"Glosada"</span>: <span class="st">""</span>, </span>
+<span id="cb30-21"><a href="#cb30-21" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"ISSN"</span>: <span class="st">""</span>,</span>
+<span id="cb30-22"><a href="#cb30-22" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"Título do Periódico"</span>: <span class="st">""</span>,                    </span>
+<span id="cb30-23"><a href="#cb30-23" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"DOI"</span>: <span class="st">""</span>,</span>
+<span id="cb30-24"><a href="#cb30-24" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"URL"</span>: <span class="st">""</span>,</span>
+<span id="cb30-25"><a href="#cb30-25" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"Tipo"</span>: row[<span class="st">"Tipo de Produção"</span>],</span>
+<span id="cb30-26"><a href="#cb30-26" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"Subtipo"</span>: row[<span class="st">"Subtipo de Produção"</span>],</span>
+<span id="cb30-27"><a href="#cb30-27" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"Idioma"</span>: <span class="st">""</span>,</span>
+<span id="cb30-28"><a href="#cb30-28" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"Autores"</span>: [],</span>
+<span id="cb30-29"><a href="#cb30-29" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"Categorias"</span>: []</span>
+<span id="cb30-30"><a href="#cb30-30" aria-hidden="true" tabindex="-1"></a>                }</span>
+<span id="cb30-31"><a href="#cb30-31" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb30-32"><a href="#cb30-32" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Se a linha contiver um autor, adiciona à lista da produção correta</span></span>
+<span id="cb30-33"><a href="#cb30-33" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> pd.notna(row[<span class="st">"Nome do Autor"</span>]):</span>
+<span id="cb30-34"><a href="#cb30-34" aria-hidden="true" tabindex="-1"></a>            producoes[titulo][<span class="st">"Autores"</span>].append(row[<span class="st">"Nome do Autor"</span>].strip())</span>
+<span id="cb30-35"><a href="#cb30-35" aria-hidden="true" tabindex="-1"></a>            producoes[titulo][<span class="st">"Categorias"</span>].append(row[<span class="st">"Categoria do Autor"</span>].strip())</span>
+<span id="cb30-36"><a href="#cb30-36" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb30-37"><a href="#cb30-37" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Converter listas de autores e categorias para strings</span></span>
+<span id="cb30-38"><a href="#cb30-38" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> titulo <span class="kw">in</span> producoes:</span>
+<span id="cb30-39"><a href="#cb30-39" aria-hidden="true" tabindex="-1"></a>        producoes[titulo][<span class="st">"Autores"</span>] <span class="op">=</span> <span class="st">"; "</span>.join(producoes[titulo][<span class="st">"Autores"</span>])</span>
+<span id="cb30-40"><a href="#cb30-40" aria-hidden="true" tabindex="-1"></a>        producoes[titulo][<span class="st">"Categorias"</span>] <span class="op">=</span> <span class="st">"; "</span>.join(producoes[titulo][<span class="st">"Categorias"</span>])</span>
+<span id="cb30-41"><a href="#cb30-41" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb30-42"><a href="#cb30-42" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Converter para DataFrame</span></span>
+<span id="cb30-43"><a href="#cb30-43" aria-hidden="true" tabindex="-1"></a>    df_final <span class="op">=</span> pd.DataFrame(producoes.values())</span>
+<span id="cb30-44"><a href="#cb30-44" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> df_final</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Com esta função podemos ler a planilha com os dados do ano atual:</p>
-<div id="c84c615d" class="cell" data-execution_count="31">
+<div id="ec40e51f" class="cell" data-execution_count="31">
 <div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>dfAtual <span class="op">=</span> preprocessaProducoesParaAutores_Atual(<span class="bu">dir</span><span class="op">+</span><span class="st">"ListaReplicadaComAutores.xls"</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>/Users/rafael/anaconda3/lib/python3.11/site-packages/openpyxl/styles/stylesheet.py:237: UserWarning:
-
-Workbook contains no default style, apply openpyxl's default
-</code></pre>
-</div>
 </div>
 <p>Unimos este novo <em>dataframe</em> ao já criado com as planilhas dos anos anteriores:</p>
-<div id="a396ab37" class="cell" data-execution_count="32">
-<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>dfUnificado <span class="op">=</span> pd.concat([dfconcatenado, dfAtual], ignore_index<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="69753ee4" class="cell" data-execution_count="32">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>dfUnificado <span class="op">=</span> pd.concat([dfconcatenado, dfAtual], ignore_index<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Salvamos em um arquivo local para uso posterior:</p>
-<div id="7ec4d395" class="cell" data-execution_count="33">
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>dfUnificado.to_csv(<span class="bu">dir</span><span class="op">+</span><span class="st">"ProduçãoComListaDeAutores.csv"</span>,index<span class="op">=</span><span class="va">False</span>)  </span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="33228b75" class="cell" data-execution_count="33">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>dfUnificado.to_csv(<span class="bu">dir</span><span class="op">+</span><span class="st">"ProduçãoComListaDeAutores.csv"</span>,index<span class="op">=</span><span class="va">False</span>)  </span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 
 
@@ -1309,7 +1306,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     </div>
   </div>
 </footer>
-<script>var lightboxQuarto = GLightbox({"loop":false,"descPosition":"bottom","closeEffect":"zoom","openEffect":"zoom","selector":".lightbox"});
+<script>var lightboxQuarto = GLightbox({"openEffect":"zoom","loop":false,"descPosition":"bottom","selector":".lightbox","closeEffect":"zoom"});
 window.onload = () => {
   lightboxQuarto.on('slide_before_load', (data) => {
     const { slideIndex, slideNode, slideConfig, player, trigger } = data;

@@ -355,9 +355,12 @@ A [planilha com dados do ano corrente](sucupira-baixando.qmd#dados-do-preenchime
 Vamos criar uma função semelhante a `preprocessaProducoesParaAutores` para ler a planilha do ano atual. Esta função vai criar campos vazios, mas compatíveis com o _dataframe_ retornado pela função `preprocessaProducoesParaAutores`:
 
 ```{python}
-def preprocessaProducoesParaAutores_Atual(file_path):
-    # Carregar planilha
-    df = pd.read_excel(file_path, sheet_name="Produções - Autores")
+def preprocessaProducoesParaAutores_Atual(fileName):
+    # Lemos a planilha
+    with warnings.catch_warnings():
+        warnings.filterwarnings("ignore", category=UserWarning, 
+                                module=re.escape('openpyxl.styles.stylesheet'))
+        df = pd.read_excel(fileName,engine='openpyxl',sheet_name='Produções - Autores')  
     
     # Criar dicionário para armazenar os dados estruturados
     producoes = {}

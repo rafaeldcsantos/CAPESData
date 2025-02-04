@@ -401,7 +401,7 @@ def preprocessaProducoesParaAutores_Atual(file_path):
 Com esta função podemos ler a planilha com os dados do ano atual:
 
 ```{python}
-dfAtual = preprocessaProducoesParaAutores_Atual("Resources/Data/ColetaSucupira/ListaReplicadaComAutores.xls")
+dfAtual = preprocessaProducoesParaAutores_Atual(dir+"ListaReplicadaComAutores.xls")
 ```
 
 Unimos este novo _dataframe_ ao já criado com as planilhas dos anos anteriores: 

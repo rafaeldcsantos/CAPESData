@@ -1,45 +1,44 @@
 ---
-title: "CAPESData"
+title: "Análise de Dados da CAPES"
 lang: pt 
 ---
 
 ## Sobre
 
-Este conjunto de documentos contém instruções, exemplos, _scripts_, etc. para acessar dados da CAPES, em particular dados de interesse de coordenadores de programas de pós-graduação e gestores. 
+Este conjunto de documentos contém instruções, exemplos, *scripts*, etc. para acessar dados da CAPES, em particular dados de interesse de coordenadores de programas de pós-graduação e gestores.
 
-Está em desenvolvimento (em 2024), mas resolvi publicar alguns exemplos que já podem ser úteis para alguns colegas. 
+Está em desenvolvimento (em 2024), mas resolvi publicar alguns exemplos que já podem ser úteis para alguns colegas.
 
 Algumas observações sobre estes documentos:
 
-* Dou mais ênfase a **reprodutibilidade** e **simplicidade** do código do que a eficiência.
-* Onde possível detalhei como obter os dados, mas em alguns casos as fontes de dados só podem ser acessadas por coordenadores de programas (ex. via plataforma Sucupira).
-* Não posso garantir que os exemplos e códigos vão funcionar sempre, mas como este é um _notebook_ o código que aparece nele foi executado para mostrar os resultados -- ao menos _uma_ vez funcionou!
-* Veja na barra à esquerda o que já está pronto. 
+-   Dou mais ênfase a **reprodutibilidade** e **simplicidade** do código do que a eficiência.
+-   Onde possível detalhei como obter os dados, mas em alguns casos as fontes de dados só podem ser acessadas por coordenadores de programas (ex. via plataforma Sucupira).
+-   Não posso garantir que os exemplos e códigos vão funcionar sempre, mas como este é um *notebook* o código que aparece nele foi executado para mostrar os resultados -- ao menos *uma* vez funcionou!
+-   Veja na barra à esquerda o que já está pronto.
 
 Este material foi preparando usando [Quarto](https://quarto.org), com código em [Python](https://www.python.org), usando [Visual Studio Code](https://code.visualstudio.com/download) como ambiente de desenvolviumento integrado.
 
-
 ### Por onde começar?
 
-Se seu interesse são nas análises já prontas (por exemplo, para usar os gráficos já preparados feitos com os dados abertos da Plataforma Sucupira) __pule__ as páginas cujos títulos iniciam com *Baixando* ou *Pré-Processamento*. Estas páginas mostram como baixar os dados das fontes originais e preparar estes dados para os relatórios e gráficos, e são úteis para reproduzir e ampliar os escopos das análises.
+Se seu interesse são nas análises já prontas (por exemplo, para usar os gráficos já preparados feitos com os dados abertos da Plataforma Sucupira) **pule** as páginas cujos títulos iniciam com *Baixando* ou *Pré-Processamento*. Estas páginas mostram como baixar os dados das fontes originais e preparar estes dados para os relatórios e gráficos, e são úteis para reproduzir e ampliar os escopos das análises.
 
-Se você quer reproduzir alguns dos exemplos usando informações de seu interesse (por exemplo, de seu programa, IES/ICT, área, região geográfica, etc.) __copie__ o código em Python relevante -- está razoavelmente documentado. Verifique antes as dependências de dados preprocessados -- também estão documentadas, provavelmente nas páginas cujos títulos iniciam com *Baixando* ou *Pré-Processamento*. 
+Se você quer reproduzir alguns dos exemplos usando informações de seu interesse (por exemplo, de seu programa, IES/ICT, área, região geográfica, etc.) **copie** o código em Python relevante -- está razoavelmente documentado. Verifique antes as dependências de dados preprocessados -- também estão documentadas, provavelmente nas páginas cujos títulos iniciam com *Baixando* ou *Pré-Processamento*.
 
-Em caso de dúvida entre em contato (veja link no rodapé das páginas). Não posso garantir respostas rápidas mas tentarei responder todas as mensagens. 
+Em caso de dúvida entre em contato (veja link no rodapé das páginas). Não posso garantir respostas rápidas mas tentarei responder todas as mensagens.
 
 ## Glossário
 
 CAPES
-: A [Coordenação de Aperfeiçoamento de Pessoal de Nível Superior](https://www.gov.br/capes/pt-br) é uma Fundação do Ministério da Educação (MEC) que  tem como missão a expansão e consolidação da pós-graduação stricto sensu (mestrado e doutorado) e formação de professores da educação básica no Brasil.
+
+:   A [Coordenação de Aperfeiçoamento de Pessoal de Nível Superior](https://www.gov.br/capes/pt-br) é uma Fundação do Ministério da Educação (MEC) que tem como missão a expansão e consolidação da pós-graduação stricto sensu (mestrado e doutorado) e formação de professores da educação básica no Brasil.
 
 Sucupira (Plataforma Sucupira)
-: A [Plataforma Sucupira](https://sucupira.capes.gov.br/sucupira/) é um conjunto de ferramentas para coleta, análise e disseminação de dados dos programas de pós-graduação do Brasil, apoiando o Sistema Nacional de Pós-Graduação (SNPG). Algumas de suas funções são o módulo de envio de dados dos programas de pós-graduação (Coleta) e o catálogo de periódicos avaliados (Qualis). A [nova versão da plataforma](https://sucupira-v2.capes.gov.br/sucupira4/) permite consultas detalhadas aos dados submetidos. 
 
+:   A [Plataforma Sucupira](https://sucupira.capes.gov.br/sucupira/) é um conjunto de ferramentas para coleta, análise e disseminação de dados dos programas de pós-graduação do Brasil, apoiando o Sistema Nacional de Pós-Graduação (SNPG). Algumas de suas funções são o módulo de envio de dados dos programas de pós-graduação (Coleta) e o catálogo de periódicos avaliados (Qualis). A [nova versão da plataforma](https://sucupira-v2.capes.gov.br/sucupira4/) permite consultas detalhadas aos dados submetidos.
 
 ## Alternativas
 
 Se seu objetivo é analisar dados da CAPES, em especial de programas de pós-graduação, existem várias alternativas que não envolvem programação e/ou cópias locais das bases de dados. Algumas são:
 
-* A nova versão da [Plataforma Sucupira](https://sucupira-v2.capes.gov.br/sucupira4/) que contém relatórios sobre cursos avaliados e reconhecidos e o [Observatório da Pós-graduação](https://sucupira-v2.capes.gov.br/#busca_observatorio).
-* O [Sistema Tarrafa](https://tarrafa.unimontes.br/), desenvolvido pela [Unimontes -- Universidade Estadual de Montes Claros](https://unimontes.br/), que usa dados da CAPES e CNPq para criar relatórios complexos e comparativos entre programas de pós-graduação.
-
+-   A nova versão da [Plataforma Sucupira](https://sucupira-v2.capes.gov.br/sucupira4/) que contém relatórios sobre cursos avaliados e reconhecidos e o [Observatório da Pós-graduação](https://sucupira-v2.capes.gov.br/#busca_observatorio).
+-   O [Sistema Tarrafa](https://tarrafa.unimontes.br/), desenvolvido pela [Unimontes -- Universidade Estadual de Montes Claros](https://unimontes.br/), que usa dados da CAPES e CNPq para criar relatórios complexos e comparativos entre programas de pós-graduação.

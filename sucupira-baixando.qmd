@@ -4,8 +4,9 @@ lightbox: true
 lang: pt
 ---
 
-::: {.callout-warning}
+::: callout-warning
 ## Atenção!
+
 Esta seção trata de dados que só podem ser obtidos da Plataforma Sucupira com credenciais de coordenador de programa de pós-graduação!
 :::
 
@@ -52,11 +53,10 @@ Como veremos alguns exemplos de análise de publicações vamos baixar a planilh
 
 ![](Resources/Images/Sucupira-onde-obter-planilhas-anos-atuais-1.webp){.lightbox} Para baixar a planilha com dados de publicações do ano corrente (claro, somente com as que o coordenador tiver importado ou cadastrado na Plataforma Sucupira) selecione a categoria `Produção Intelectual`, use como Ano de Referência o ano corrente, selecione a opção de exportar relatório para XLS e como tipo de relatório selecione `Lista replicada de produções intelectuais com informação de autores` -- esta será a opção mais adequada para os relatórios deste estudo. As opções sugeridas são mostradas na figura abaixo.
 
-
-![](Resources/Images/Sucupira-onde-obter-planilhas-anos-atuais-2.webp){.lightbox} 
+![](Resources/Images/Sucupira-onde-obter-planilhas-anos-atuais-2.webp){.lightbox}
 
 Clique em `Gerar Relatório` e aguarde o *link* para baixar a planilha. Renomeie-a para `ListaReplicadaComAutores.xls`.
 
-::: {.callout-note}
-É possível obter esta planilha mesmo após a submissão e homologação do Coleta do ano de referência. 
+::: callout-note
+É possível obter esta planilha mesmo após a submissão e homologação do Coleta do ano de referência.
 :::

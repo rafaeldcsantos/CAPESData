@@ -4,157 +4,152 @@ lightbox: true
 lang: pt
 ---
 
-::: {.callout-note}
+::: callout-note
 ## Atenção!
+
 Os dados usados nesta seção podem ser baixados por qualquer usuário a partir do portal de dados abertos da CAPES.
 :::
 
-
 ## Como obter os dados {#sec-dados-abertos-obter}
 
-A CAPES ([Coordenação de Aperfeiçoamento de Pessoal de Nível Superior](https://www.gov.br/capes/pt-br)) mantém várias coleções temáticas de dados abertos que podem ser usados para pesquisa. Alguns destes dados são alimentados pela Plataforma Sucupira e contém informações sobre **todos** os programas de pós-graduação stricto sensu do Brasil. 
+A CAPES ([Coordenação de Aperfeiçoamento de Pessoal de Nível Superior](https://www.gov.br/capes/pt-br)) mantém várias coleções temáticas de dados abertos que podem ser usados para pesquisa. Alguns destes dados são alimentados pela Plataforma Sucupira e contém informações sobre **todos** os programas de pós-graduação stricto sensu do Brasil.
 
 Por usar como fonte a Plataforma Sucupira os conjuntos de dados nas coleções cobrem até a última avaliação anual: em Maio de 2024, somente os dados até 2022 estavam disponíveis.
 
 Para acessar as coleções vá ao portal [Dados Abertos CAPES](https://dadosabertos.capes.gov.br/). No portal são listados vários temas, como mostrados na figura abaixo.
 
-![](Resources/Images/Dadosabertos-portal.webp){.lightbox} 
+![](Resources/Images/Dadosabertos-portal.webp){.lightbox}
 
-Para as análises deste documento vamos usar o tema _Avaliação da Pós-Graduação _Stricto Sensu_:_ 
+Para as análises deste documento vamos usar o tema *Avaliação da Pós-Graduação Stricto Sensu*:
 
-![](Resources/Images/Dadosabertos-avaliacao.webp){.lightbox} 
+![](Resources/Images/Dadosabertos-avaliacao.webp){.lightbox}
 
 Selecionando esta opção aparecerá uma página onde podemos selecionar os conjuntos de dados por categoria ou filtrando por palavra-chave. Ao fazer uma busca ou seleção aparecerão descritores dos conjuntos, identificados por título e período de cobertura, como mostrado a seguir.
 
-![](Resources/Images/Dadosabertos-discentes-1.webp){.lightbox} 
+![](Resources/Images/Dadosabertos-discentes-1.webp){.lightbox}
 
-Ao clicar em um dos descritores veremos outra página com todos os arquivos daquela coleção, com _links_ para baixar os arquivos. 
+Ao clicar em um dos descritores veremos outra página com todos os arquivos daquela coleção, com *links* para baixar os arquivos.
 
 Vejam que um conjunto de dados pode estar distribuído em várias páginas (por exemplo, dados de cursos estão nas páginas `[2013 a 2016] Cursos da Pós-Graduação Stricto Sensu do Brasil`, `[2017 a 2020] Cursos da Pós-Graduação Stricto Sensu no Brasil` e `[2021 a 2024] Cursos da Pós-Graduação Stricto Sensu no Brasil`, dados da Produção Intelectual estão distribuídos em nove páginas). Como os arquivos variam de acordo com a coleção veremos quais baixar nos exemplos específicos a seguir.
 
-## Dados sobre Cursos da Pós-Graduação _Stricto Sensu_ no Brasil {#sec-dados-abertos-cursos}
+## Dados sobre Cursos da Pós-Graduação *Stricto Sensu* no Brasil {#sec-dados-abertos-cursos}
 
-Vamos começar baixando as planilhas com os dados dos cursos de pós-graduação. Elas estão distribuídas em três páginas no Portal de Dados Abertos: `[2013 a 2016] Cursos da Pós-Graduação Stricto Sensu do Brasil`, `[2017 a 2020] Cursos da Pós-Graduação Stricto Sensu no Brasil` e `[2021 a 2024] Cursos da Pós-Graduação Stricto Sensu no Brasil`. Cada página contém _links_ para baixar as planilhas nos formatos `.csv` e `.xlsx`, para cada um dos anos da coleção, além de arquivos com metadados. A figura abaixo mostra os links para acesso às planilhas com dados entre 2013 e 2016.
+Vamos começar baixando as planilhas com os dados dos cursos de pós-graduação. Elas estão distribuídas em três páginas no Portal de Dados Abertos: `[2013 a 2016] Cursos da Pós-Graduação Stricto Sensu do Brasil`, `[2017 a 2020] Cursos da Pós-Graduação Stricto Sensu no Brasil` e `[2021 a 2024] Cursos da Pós-Graduação Stricto Sensu no Brasil`. Cada página contém *links* para baixar as planilhas nos formatos `.csv` e `.xlsx`, para cada um dos anos da coleção, além de arquivos com metadados. A figura abaixo mostra os links para acesso às planilhas com dados entre 2013 e 2016.
 
-![](Resources/Images/Dadosabertos-cursos.webp){.lightbox} 
+![](Resources/Images/Dadosabertos-cursos.webp){.lightbox}
 
-Para as nossas análises vamos usar os arquivos `.xlsx`, que podem ser baixados clicando nos ícones verdes com uma seta para baixo e aguardar o início do _download_. Os arquivos baixados são mostrados a seguir:
+Para as nossas análises vamos usar os arquivos `.xlsx`, que podem ser baixados clicando nos ícones verdes com uma seta para baixo e aguardar o início do *download*. Os arquivos baixados são mostrados a seguir:
 
-| Nome do arquivo                                 | Tamanho | Colunas | Linhas |
-|-------------------------------------------------|--------:|--------:|-------:|
-|br-capes-colsucup-curso-2013a2016-2020-06-12_2013.xlsx|792012|28|5646|
-|br-capes-colsucup-curso-2013a2016-2020-06-12_2014.xlsx|821140|28|5854|
-|br-capes-colsucup-curso-2013a2016-2020-06-12_2015.xlsx|854794|28|6060|
-|br-capes-colsucup-curso-2013a2016-2020-06-12_2016.xlsx|890656|28|6313|
-|br-capes-colsucup-curso-2017-2021-11-10.xlsx|923526|28|6494|
-|br-capes-colsucup-curso-2018-2021-11-10.xlsx|950909|28|6695|
-|br-capes-colsucup-curso-2019-2021-11-10.xlsx|991420|28|6950|
-|br-capes-colsucup-curso-2020-2021-11-10.xlsx|995363|28|7000|
-|br-capes-colsucup-curso-2021-2023-11-30.xlsx|1021464|28|7163|
-|br-capes-colsucup-curso-2022-2023-11-30.xlsx|1001124|28|7027|
+| Nome do arquivo                                        | Tamanho | Colunas | Linhas |
+|---------------------------------|------------:|------------:|------------:|
+| br-capes-colsucup-curso-2013a2016-2020-06-12_2013.xlsx |  792012 |      28 |   5646 |
+| br-capes-colsucup-curso-2013a2016-2020-06-12_2014.xlsx |  821140 |      28 |   5854 |
+| br-capes-colsucup-curso-2013a2016-2020-06-12_2015.xlsx |  854794 |      28 |   6060 |
+| br-capes-colsucup-curso-2013a2016-2020-06-12_2016.xlsx |  890656 |      28 |   6313 |
+| br-capes-colsucup-curso-2017-2021-11-10.xlsx           |  923526 |      28 |   6494 |
+| br-capes-colsucup-curso-2018-2021-11-10.xlsx           |  950909 |      28 |   6695 |
+| br-capes-colsucup-curso-2019-2021-11-10.xlsx           |  991420 |      28 |   6950 |
+| br-capes-colsucup-curso-2020-2021-11-10.xlsx           |  995363 |      28 |   7000 |
+| br-capes-colsucup-curso-2021-2023-11-30.xlsx           | 1021464 |      28 |   7163 |
+| br-capes-colsucup-curso-2022-2023-11-30.xlsx           | 1001124 |      28 |   7027 |
+
 : Arquivos com dados sobre cursos {#tbl-abertos-baixando-cursos .striped .hover}
 
+## Dados sobre Docentes da Pós-Graduação *Stricto Sensu* no Brasil {#sec-dados-abertos-docentes}
 
-## Dados sobre Docentes da Pós-Graduação _Stricto Sensu_ no Brasil {#sec-dados-abertos-docentes}
+Vamos também baixar as planilhas com os dados dos docentes de pós-graduação. Elas estão distribuídas em quatro páginas no Portal de Dados Abertos: `[2004 a 2012] Docentes dos Programas de Pós-Graduação stricto sensu no Brasil`, `[2013 a 2016] Docentes da Pós-Graduação Stricto Sensu no Brasil`, `[2017 a 2020] Docentes da Pós-Graduação Stricto Sensu no Brasil` e `[2021 a 2024] Docentes da Pós-Graduação Stricto Sensu no Brasil`. Cada página contém *links* para baixar as planilhas nos formatos `.csv` e `.xlsx`, para cada um dos anos da coleção, além de arquivos com metadados. A figura abaixo mostra os links para acesso às planilhas com dados entre 2004 e 2012.
 
-Vamos também baixar as planilhas com os dados dos docentes de pós-graduação. Elas estão distribuídas em quatro páginas no Portal de Dados Abertos: 
-`[2004 a 2012] Docentes dos Programas de Pós-Graduação stricto sensu no Brasil`,
-`[2013 a 2016] Docentes da Pós-Graduação Stricto Sensu no Brasil`,
-`[2017 a 2020] Docentes da Pós-Graduação Stricto Sensu no Brasil` e
-`[2021 a 2024] Docentes da Pós-Graduação Stricto Sensu no Brasil`.
-Cada página contém _links_ para baixar as planilhas nos formatos `.csv` e `.xlsx`, para cada um dos anos da coleção, além de arquivos com metadados. A figura abaixo mostra os links para acesso às planilhas com dados entre 2004 e 2012.
+![](Resources/Images/Dadosabertos-docentes.webp){.lightbox}
 
-![](Resources/Images/Dadosabertos-docentes.webp){.lightbox} 
+Os arquivos baixados, seus tamanhos em *bytes*, e suas quantidades de colunas e linhas (sem cabeçalho) são mostrados na tabela a seguir.
 
-Os arquivos baixados, seus tamanhos em _bytes_, e suas quantidades de colunas e linhas (sem cabeçalho) são mostrados na tabela a seguir.
+| Nome do arquivo                                     |  Tamanho | Colunas | Linhas |
+|---------------------------------|------------:|------------:|------------:|
+| br-capes-colsucup-docente-2004a2012-2021-03-01.xlsx | 65227884 |      33 | 491773 |
+| br-capes-colsucup-docente-2013-2023-08-01.xlsx      | 13784386 |      42 |  79622 |
+| br-capes-colsucup-docente-2014-2023-08-01.xlsx      | 14842064 |      42 |  85650 |
+| br-capes-colsucup-docente-2015-2023-08-01.xlsx      | 15626101 |      42 |  90307 |
+| br-capes-colsucup-docente-2016-2023-08-01.xlsx      | 16477872 |      42 |  95246 |
+| br-capes-colsucup-docente-2017-2021-11-10.xlsx      | 19000457 |      41 | 102279 |
+| br-capes-colsucup-docente-2018-2021-11-10.xlsx      | 19435907 |      41 | 104531 |
+| br-capes-colsucup-docente-2019-2021-11-10.xlsx      | 20148746 |      41 | 108346 |
+| br-capes-colsucup-docente-2020-2021-11-10.xlsx      | 19782331 |      41 | 105575 |
+| br-capes-colsucup-docente-2021-2023-11-30.xlsx      | 20025270 |      41 | 110059 |
+| br-capes-colsucup-docente-2022-2023-11-30.xlsx      | 20267644 |      41 | 109548 |
 
-| Nome do arquivo                                 | Tamanho | Colunas | Linhas |
-|-------------------------------------------------|--------:|--------:|-------:|
-|br-capes-colsucup-docente-2004a2012-2021-03-01.xlsx|65227884|33|491773|
-|br-capes-colsucup-docente-2013-2023-08-01.xlsx|13784386|42|79622|
-|br-capes-colsucup-docente-2014-2023-08-01.xlsx|14842064|42|85650|
-|br-capes-colsucup-docente-2015-2023-08-01.xlsx|15626101|42|90307|
-|br-capes-colsucup-docente-2016-2023-08-01.xlsx|16477872|42|95246|
-|br-capes-colsucup-docente-2017-2021-11-10.xlsx|19000457|41|102279|
-|br-capes-colsucup-docente-2018-2021-11-10.xlsx|19435907|41|104531|
-|br-capes-colsucup-docente-2019-2021-11-10.xlsx|20148746|41|108346|
-|br-capes-colsucup-docente-2020-2021-11-10.xlsx|19782331|41|105575|
-|br-capes-colsucup-docente-2021-2023-11-30.xlsx|20025270|41|110059|
-|br-capes-colsucup-docente-2022-2023-11-30.xlsx|20267644|41|109548|
 : Arquivos com dados sobre docentes {#tbl-abertos-baixando-docentes .striped .hover}
 
-## Dados sobre Discentes da Pós-Graduação _Stricto Sensu_ no Brasil {#sec-dados-abertos-discentes}
+## Dados sobre Discentes da Pós-Graduação *Stricto Sensu* no Brasil {#sec-dados-abertos-discentes}
 
-O [Portal de Dados Abertos](https://dadosabertos.capes.gov.br/) também contém informações detalhadas sobre todos os discentes dos programas de pós-graduação _stricto sensu_ do Brasil, organizados em planilhas, uma por ano, e separadas em vários grupos, cada um com sua página de acesso, em um total de quatro páginas. A figura abaixo mostra os _links_ para acesso às planilhas com dados entre 2021 e 2024.
+O [Portal de Dados Abertos](https://dadosabertos.capes.gov.br/) também contém informações detalhadas sobre todos os discentes dos programas de pós-graduação *stricto sensu* do Brasil, organizados em planilhas, uma por ano, e separadas em vários grupos, cada um com sua página de acesso, em um total de quatro páginas. A figura abaixo mostra os *links* para acesso às planilhas com dados entre 2021 e 2024.
 
-![](Resources/Images/Dadosabertos-discentes-2.webp){.lightbox} 
+![](Resources/Images/Dadosabertos-discentes-2.webp){.lightbox}
 
-Vejam que apesar do conjunto de dados fazer referência aos anos 2021 a 2024, somente estão presentes _links_ para 2021 e 2022, por causa dos prazos da coleta na Plataforma Sucupira (leiam sempre a descrição sobre o conjunto no portal!)
+Vejam que apesar do conjunto de dados fazer referência aos anos 2021 a 2024, somente estão presentes *links* para 2021 e 2022, por causa dos prazos da coleta na Plataforma Sucupira (leiam sempre a descrição sobre o conjunto no portal!)
 
-Dependendo da análise basta baixar os arquivos correspondentes aos anos de interesse, mas para completude e para ilustrar casos difíceis no preprocessamento vamos baixar todas as planilhas disponíveis. Para isto será necessário acessar também os conjuntos de dados `[2004 a 2012] Discentes dos Programas de Pós-Graduação stricto sensu no Brasil`,  `[2013 a 2016] Discentes da Pós-Graduação Stricto Sensu do Brasil` e `[2017 a 2020] Discentes da Pós-Graduação stricto sensu do Brasil`.
+Dependendo da análise basta baixar os arquivos correspondentes aos anos de interesse, mas para completude e para ilustrar casos difíceis no preprocessamento vamos baixar todas as planilhas disponíveis. Para isto será necessário acessar também os conjuntos de dados `[2004 a 2012] Discentes dos Programas de Pós-Graduação stricto sensu no Brasil`, `[2013 a 2016] Discentes da Pós-Graduação Stricto Sensu do Brasil` e `[2017 a 2020] Discentes da Pós-Graduação stricto sensu do Brasil`.
 
-Os arquivos baixados, seus tamanhos em _bytes_, e suas quantidades de colunas e linhas (sem cabeçalho) são mostrados na tabela a seguir.
+Os arquivos baixados, seus tamanhos em *bytes*, e suas quantidades de colunas e linhas (sem cabeçalho) são mostrados na tabela a seguir.
 
-| Nome do arquivo                                 | Tamanho | Colunas | Linhas |
-|-------------------------------------------------|--------:|--------:|-------:|
-|br-capes-colsucup-discentes-2004-2021-03-01.xlsx |26195517 | AE (31) | 190038 |
-|br-capes-colsucup-discentes-2005-2021-03-01.xlsx |29273270 | AE (31) | 212073 |
-|br-capes-colsucup-discentes-2006-2021-03-01.xlsx |31559779 | AE (31) | 229290 |
-|br-capes-colsucup-discentes-2007-2021-03-01.xlsx |34804116 | AE (31) | 252102 |
-|br-capes-colsucup-discentes-2008-2021-03-01.xlsx |37449507 | AE (31) | 270170 |
-|br-capes-colsucup-discentes-2009-2021-03-01.xlsx |42033259 | AE (31) | 290592 |
-|br-capes-colsucup-discentes-2010-2021-03-01.xlsx |45629174 | AE (31) | 316398 |
-|br-capes-colsucup-discentes-2011-2021-03-01.xlsx |49755534 | AE (31) | 345048 |
-|br-capes-colsucup-discentes-2012-2021-03-01.xlsx |54409827 | AE (31) | 375260 |
-|br-capes-colsucup-discentes-2013-2021-03-01.xlsx |52967544 | AK (37) | 300210 |
-|br-capes-colsucup-discentes-2014-2021-03-01.xlsx |56048168 | AK (37) | 317846 |
-|br-capes-colsucup-discentes-2015-2021-03-01.xlsx |59802222 | AK (37) | 338035 |
-|br-capes-colsucup-discentes-2016-2021-03-01.xlsx |63325526 | AK (37) | 357353 |
-|br-capes-colsucup-discentes-2017-2023-12-01.xlsx |62190534 | AK (37) | 374429 |
-|br-capes-colsucup-discentes-2018-2023-12-01.xlsx |64833813 | AK (37) | 390174 |
-|br-capes-colsucup-discentes-2019-2023-12-01.xlsx |66848001 | AK (37) | 401311 |
-|br-capes-colsucup-discentes-2020-2023-12-01.xlsx |65222388 | AK (37) | 395870 |
-|br-capes-colsucup-discentes-2021-2023-11-30.xlsx |72086227 | AK (37) | 420350 |
-|br-capes-colsucup-discentes-2022-2023-11-30.xlsx |73083882 | AK (37) | 424081 |
+| Nome do arquivo                                  |  Tamanho | Colunas | Linhas |
+|---------------------------------|------------:|------------:|------------:|
+| br-capes-colsucup-discentes-2004-2021-03-01.xlsx | 26195517 | AE (31) | 190038 |
+| br-capes-colsucup-discentes-2005-2021-03-01.xlsx | 29273270 | AE (31) | 212073 |
+| br-capes-colsucup-discentes-2006-2021-03-01.xlsx | 31559779 | AE (31) | 229290 |
+| br-capes-colsucup-discentes-2007-2021-03-01.xlsx | 34804116 | AE (31) | 252102 |
+| br-capes-colsucup-discentes-2008-2021-03-01.xlsx | 37449507 | AE (31) | 270170 |
+| br-capes-colsucup-discentes-2009-2021-03-01.xlsx | 42033259 | AE (31) | 290592 |
+| br-capes-colsucup-discentes-2010-2021-03-01.xlsx | 45629174 | AE (31) | 316398 |
+| br-capes-colsucup-discentes-2011-2021-03-01.xlsx | 49755534 | AE (31) | 345048 |
+| br-capes-colsucup-discentes-2012-2021-03-01.xlsx | 54409827 | AE (31) | 375260 |
+| br-capes-colsucup-discentes-2013-2021-03-01.xlsx | 52967544 | AK (37) | 300210 |
+| br-capes-colsucup-discentes-2014-2021-03-01.xlsx | 56048168 | AK (37) | 317846 |
+| br-capes-colsucup-discentes-2015-2021-03-01.xlsx | 59802222 | AK (37) | 338035 |
+| br-capes-colsucup-discentes-2016-2021-03-01.xlsx | 63325526 | AK (37) | 357353 |
+| br-capes-colsucup-discentes-2017-2023-12-01.xlsx | 62190534 | AK (37) | 374429 |
+| br-capes-colsucup-discentes-2018-2023-12-01.xlsx | 64833813 | AK (37) | 390174 |
+| br-capes-colsucup-discentes-2019-2023-12-01.xlsx | 66848001 | AK (37) | 401311 |
+| br-capes-colsucup-discentes-2020-2023-12-01.xlsx | 65222388 | AK (37) | 395870 |
+| br-capes-colsucup-discentes-2021-2023-11-30.xlsx | 72086227 | AK (37) | 420350 |
+| br-capes-colsucup-discentes-2022-2023-11-30.xlsx | 73083882 | AK (37) | 424081 |
+
 : Arquivos com dados sobre discentes {#tbl-abertos-baixando-discentes .striped .hover}
 
+## Dados sobre Produção Intelectual de Programas de Pós-Graduação *Stricto Sensu* no Brasil {#sec-dados-abertos-producao}
 
-## Dados sobre Produção Intelectual de Programas de Pós-Graduação _Stricto Sensu_ no Brasil {#sec-dados-abertos-producao}
+Vamos também baixar *alguns* dos dados sobre produção intelectual. Esta é a coleção mais complexa e variada dos dados abertos da CAPES, estando representada em três grupos: `Produção Intelectual dos Programas de Pós-Graduação Stricto Sensu no Brasil`, `Autor da Produção Intelectual de Programas de Pós-Graduação Stricto Sensu no Brasil` e `Detalhes da Produção Intelectual dos Programas da Pós-Graduação Strictu Sensu do Brasil`.
 
-Vamos também baixar _alguns_ dos dados sobre produção intelectual. Esta é a coleção mais complexa e variada dos dados abertos da CAPES, estando representada em três grupos: 
-`Produção Intelectual dos Programas de Pós-Graduação Stricto Sensu no Brasil`, 
-`Autor da Produção Intelectual de Programas de Pós-Graduação Stricto Sensu no Brasil` e 
-`Detalhes da Produção Intelectual dos Programas da Pós-Graduação Strictu Sensu do Brasil`.
+A figura abaixo mostra <u>parte</u> dos *links* para acesso às planilhas com dados da produção intelectual entre 2021 e 2024.
 
+![](Resources/Images/Dadosabertos-producao.webp){.lightbox}
 
- A figura abaixo mostra <u>parte</u> dos _links_ para acesso às planilhas com dados da produção intelectual entre 2021 e 2024.
-
-![](Resources/Images/Dadosabertos-producao.webp){.lightbox} 
-
-::: {.callout-note}
+::: callout-note
 ## Atenção!
-Cada um dos conjuntos de dados sobre produção intelectual pode ter várias planilhas associadas, correspondentes aos subtipos das produção intelectual. Em alguns casos um tipo e subtipo pode ter duas planilhas associadas, para divisão dos dados, evitando arquivos desnecessariamente grandes. 
+
+Cada um dos conjuntos de dados sobre produção intelectual pode ter várias planilhas associadas, correspondentes aos subtipos das produção intelectual. Em alguns casos um tipo e subtipo pode ter duas planilhas associadas, para divisão dos dados, evitando arquivos muito grandes.
 :::
 
-Para os exemplos nas outras seções usaremos somente as produções do tipo **técnica** e Subtipo **Cartas, Mapas ou Similares** e do tipo **Bibliográfica** e Subtipo **Artigo em Periódico**. 
+Para os exemplos nas outras seções usaremos somente as produções do tipo **técnica** e Subtipo **Cartas, Mapas ou Similares** e do tipo **Bibliográfica** e Subtipo **Artigo em Periódico**.
 
 Os arquivos baixados para produções do tipo **técnica** e Subtipo **Cartas, Mapas ou Similares**, seus tamanhos em bytes, e suas quantidades de colunas e linhas (sem cabeçalho) são mostrados na tabela a seguir.
-  
-| Nome do arquivo                                 | Tamanho | Colunas | Linhas |
-|-------------------------------------------------|--------:|--------:|-------:|
-|br-capes-col-prod-2004a2012-2018-08-01-tecnica-cartamap.xlsx|349520|31|2251|
-|br-capes-colsucup-producao-2013a2016-2017-11-01-tecnica-cartamap.xlsx|224863|25|1756|
-|br-capes-colsucup-producao-2017a2020-2022-06-22-tecnica-cartamap.xlsx|391664|25|2914|
-|br-capes-colsucup-producao-2021a2024-2023-10-31-tecnica-cartamap.xlsx|157706|29|1036|
+
+| Nome do arquivo                                                       | Tamanho | Colunas | Linhas |
+|---------------------------------|------------:|------------:|------------:|
+| br-capes-col-prod-2004a2012-2018-08-01-tecnica-cartamap.xlsx          |  349520 |      31 |   2251 |
+| br-capes-colsucup-producao-2013a2016-2017-11-01-tecnica-cartamap.xlsx |  224863 |      25 |   1756 |
+| br-capes-colsucup-producao-2017a2020-2022-06-22-tecnica-cartamap.xlsx |  391664 |      25 |   2914 |
+| br-capes-colsucup-producao-2021a2024-2023-10-31-tecnica-cartamap.xlsx |  157706 |      29 |   1036 |
+
 : Arquivos com dados sobre Cartas, Mapas ou Similares {#tbl-abertos-baixando-cartas .striped .hover}
 
 Os arquivos baixados para produções tipo **Bibliográfica** e Subtipo **Artigo em Periódico**, seus tamanhos em bytes, e suas quantidades de colunas e linhas (sem cabeçalho) são mostrados na tabela a seguir:
 
-| Nome do arquivo                                 | Tamanho | Colunas | Linhas |
-|-------------------------------------------------|--------:|--------:|-------:|
-|br-capes-col-prod-2004a2012-2018-08-01-bibliografica-artpe.xlsx|185157864|31|1039024|
-|br-capes-colsucup-producao-2013a2016-2020-06-30-bibliografica-artpe.xlsx|147873130|29|849903|
-|br-capes-colsucup-producao-2017a2020-2023-11-30-bibliografica-artpe_parte1.xlsx|81090821|29|581162|
-|br-capes-colsucup-producao-2017a2020-2023-11-30-bibliografica-artpe_parte2.xlsx|81386085|29|581162|
-|br-capes-colsucup-producao-2021a2024-2023-10-31-bibliografica-artpe.xlsx|92968228|31|642735|
+| Nome do arquivo                                                                 |   Tamanho | Colunas |  Linhas |
+|---------------------------------|------------:|------------:|------------:|
+| br-capes-col-prod-2004a2012-2018-08-01-bibliografica-artpe.xlsx                 | 185157864 |      31 | 1039024 |
+| br-capes-colsucup-producao-2013a2016-2020-06-30-bibliografica-artpe.xlsx        | 147873130 |      29 |  849903 |
+| br-capes-colsucup-producao-2017a2020-2023-11-30-bibliografica-artpe_parte1.xlsx |  81090821 |      29 |  581162 |
+| br-capes-colsucup-producao-2017a2020-2023-11-30-bibliografica-artpe_parte2.xlsx |  81386085 |      29 |  581162 |
+| br-capes-colsucup-producao-2021a2024-2023-10-31-bibliografica-artpe.xlsx        |  92968228 |      31 |  642735 |
+
 : Arquivos com dados sobre Artigos em Periódicos {#tbl-abertos-baixando-artpe .striped .hover}

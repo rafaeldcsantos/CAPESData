@@ -1,0 +1,274 @@
+---
+title: "Análise de Coautorias"
+lightbox: true
+lang: pt
+---
+
+## Sobre
+
+Este documento apresenta código e procedimentos para criar gráficos e análises sobre **coautoria de trabalhos de discentes e docentes dos programas de pós-graduação**.
+
+## Obtendo os dados
+
+Primeiro verifique na seção [Dados sobre Discentes da Pós-Graduação Stricto Sensu no Brasil](dadosabertos-baixando.qmd#sec-dados-abertos-producao) como baixar as planilhas com dados de docentes. Para os exemplos neste documento usaremos os arquivos `br-capes-col-prod-2004a2012-2018-08-01-bibliografica-artpe.xlsx`, `br-capes-colsucup-producao-2013a2016-2020-06-30-bibliografica-artpe.xlsx`, `br-capes-colsucup-producao-2017a2020-2023-11-30-bibliografica-artpe_parte1.xlsx`, `br-capes-colsucup-producao-2017a2020-2023-11-30-bibliografica-artpe_parte2.xlsx`, `br-capes-colsucup-producao-2021a2024-2023-10-31-bibliografica-artpe.xlsx` (versões mais atuais quando o documento foi criado). Veja também a [Tabela *Arquivos com dados sobre Artigos em Periódicos*](dadosabertos-baixando.qmd#tbl-abertos-baixando-artpe).
+
+::: {.callout-important title="Atenção"}
+Os dados usados neste documento são de 2022.
+:::
+
+## Lendo e filtrando os dados
+
+```{python}
+import pandas as pd
+import glob
+import re
+import warnings
+from IPython.display import Markdown
+```
+
+Para cada planilha vamos ler a aba `Produção Intelectual` da planilha, filtrar alguns campos que não são necessários e separar somente as linhas que tem nomes de autores. Como repetiremos estes passos para cada planilha é melhor definir uma função em Python que recebe o nome do arquivo e retorna um *dataframe* com os campos e linhas que precisamos:
+
+```{python}
+def preprocessaProducoes(fileName):
+    # Lemos a planilha.
+    with warnings.catch_warnings():
+        warnings.filterwarnings("ignore", category=UserWarning, 
+                                module=re.escape('openpyxl.styles.stylesheet'))
+        df = pd.read_excel(fileName,engine='openpyxl',sheet_name='Produção Intelectual')
+    # Removemos os campos indesejados.    
+    keep = ['Ano da Produção', 'Título da Produção', 'Produção Glosada?',
+            'Tipo da Produção', 'Subtipo da Produção', 
+            'Nome do Detalhamento', 'Valor do Detalhamento',
+            'Nome do Autor', 'Categoria do Autor'
+             ]
+    df = df[keep]
+    return df
+```
+
+A biblioteca usada para a leitura de planilhas gera advertências no código, para isto usamos filtros de alertas (veja mais detalhes [aqui](https://stackoverflow.com/questions/66214951/deal-with-openpyxl-warning-workbook-contains-no-default-style-apply-openpyxl/77942784)).
+
+Os dados que precisamos estão todos armazenados em planilhas, uma por ano, em um diretório (a lista de planilhas para este documento pode ser vista [aqui](sucupira-baixando.qmd#arquivos-baixados-neste-exemplo)):
+
+```{python}
+dir = "Resources/Data/ColetaSucupira/"
+```
+
+Podemos então criar uma lista de arquivos com nomes semelhantes no diretório indicado e uma lista de *dataframes* para receber os dados:
+
+```{python}
+fileNames = glob.glob(dir+"relatorio_dados_enviados_coleta_20??.xlsx")
+dfs = []
+```
+
+Agora podemos ler cada um destes arquivos, filtrar linhas e colunas e anexar o *dataframe* filtrado à lista de *dataframes*:
+
+```{python}
+for file in fileNames:
+    df = preprocessaProducoes(file)
+    dfs.append(df)
+```
+
+Em uma linha concatenaremos todos os *dataframes* da produção intelectual do conjunto de planilhas:
+
+```{python}
+dfconcatenado = pd.concat(dfs, ignore_index=True)    
+```
+
+Devemos manter somente as produções que **não** foram glosadas:
+
+```{python}
+#dfconcatenado = dfconcatenado[dfconcatenado['Produção Glosada?'] == 'Não']
+#dfconcatenado.drop(columns=['Produção Glosada?'], inplace=True)
+```
+
+Agora temos todas as produções intelectuais de todos os anos que foram coletados na Plataforma Sucupira sobre nosso programa de pós-graduação. Mas estes dados ainda não estão prontos para a análise que queremos fazer: cada registro no *dataframe* contém informação sobre uma produção e um autor, portanto uma produção com quatro autores está representada em quatro registros.
+
+Podemos entender melhor este *dataframe* temporário criando um subconjunto dele contendo somente registros do artigo *"A PLATFORM FOR LAND USE AND LAND COVER DATA INTEGRATION AND TRAJECTORY ANALYSIS"*. Para visualizar melhor este subconjunto visualizando-o como uma tabela (eliminando antes alguns campos redundantes para facilitar a visualização):
+
+# reescreva o texto!
+
+```{python}
+def determine_titulo_pub(subtipo, details):
+    if subtipo == "ARTIGO EM PERIÓDICO":
+        return details.get("ISSN / Título do periódico", None)
+    elif subtipo == "TRABALHO EM ANAIS":
+        return details.get("Nome do evento", None)
+    elif subtipo == "LIVRO":
+        return details.get("Título da Obra", None)
+    return None
+```
+
+```{python}
+
+# Initialize a list to hold flattened rows
+flattened_data = []
+
+# Group by 'Ano da Produção' and 'Título da Produção' to iterate over each publication
+for _, group in dfconcatenado.groupby(['Ano da Produção', 'Título da Produção', 'Subtipo da Produção']):
+    # Collect the 'Nome do Detalhamento' and 'Valor do Detalhamento' pairs into a dictionary for easy access
+    details = dict(zip(group['Nome do Detalhamento'], group['Valor do Detalhamento']))
+    
+    # Determine 'TITULO PUB' based on the given conditions
+    subtipo = group['Subtipo da Produção'].iloc[0]
+    titulo_pub = determine_titulo_pub(subtipo, details)
+    
+    # Generate a unique ID
+    ano_producao = group['Ano da Produção'].iloc[0]
+    titulo_producao = group['Título da Produção'].iloc[0]
+    unique_id = f"{ano_producao}_{titulo_producao}_{subtipo}"
+
+    # Prepare a flattened row
+    flattened_row = {
+        "Unique ID": unique_id,
+        "Ano da Produção": ano_producao,
+        "Título da Produção": titulo_producao,
+        "Produção Glosada?": group['Produção Glosada?'].iloc[0],
+        "Tipo da Produção": group['Tipo da Produção'].iloc[0],
+        "Subtipo da Produção": subtipo,
+        "TITULO PUB": titulo_pub
+    }
+    
+    # Adding authors as they are repeated with 'Nome do Autor' and 'Categoria do Autor' columns
+    authors = group[['Nome do Autor', 'Categoria do Autor']].dropna()
+    flattened_row['Autores'] = authors.to_dict(orient='records')
+    
+    flattened_data.append(flattened_row)
+
+# Convert the flattened data to a DataFrame
+flattened_df = pd.DataFrame(flattened_data)
+
+
+```
+
+```{python}
+Markdown(flattened_df.head(10).to_markdown(index=False))
+
+
+```
+
+```{python}
+from itertools import combinations
+
+# Initialize a list to hold pairwise author combinations
+author_pairs_data = []
+
+# Iterate over each row in the flattened DataFrame to generate pairs of authors
+for _, row in flattened_df.iterrows():
+    authors = row['Autores']
+    if len(authors) > 1:  # Only process if there are two or more authors
+        # Generate all pair combinations of authors
+        for author1, author2 in combinations(authors, 2):
+            author_pair_entry = {
+                "Ano da Produção": row['Ano da Produção'],
+                "Título da Produção": row['Título da Produção'],
+                "Tipo da Produção": row['Tipo da Produção'],
+                "Subtipo da Produção": row['Subtipo da Produção'],
+                "Author 1": author1['Nome do Autor'],
+                "Categoria Author 1": author1['Categoria do Autor'],
+                "Author 2": author2['Nome do Autor'],
+                "Categoria Author 2": author2['Categoria do Autor']
+            }
+            author_pairs_data.append(author_pair_entry)
+
+# Convert the list of author pairs to a DataFrame
+author_pairs_df = pd.DataFrame(author_pairs_data)
+```
+
+```{python}
+Markdown(author_pairs_df.head(20).to_markdown(index=False))
+
+# Save the DataFrame to CSV
+author_pairs_df.to_csv(dir+"pares.csv", index=False)
+
+```
+
+# OOGA OOGA OOGA
+
+# OOGA OOGA OOGA
+
+# OOGA OOGA OOGA
+
+# OOGA OOGA OOGA
+
+# OOGA OOGA OOGA
+
+# OOGA OOGA OOGA
+
+# OOGA OOGA OOGA
+
+# OOGA OOGA OOGA
+
+# OOGA OOGA OOGA
+
+# OOGA OOGA OOGA
+
+# OOGA OOGA OOGA
+
+```{python}
+```
+
+```{python}
+```
+
+```{python}
+```
+
+```{python}
+```
+
+```{python}
+```
+
+```{python}
+```
+
+```{python}
+```
+
+```{python}
+```
+
+```{python}
+```
+
+```{python}
+```
+
+```{python}
+```
+
+```{python}
+```
+
+```{python}
+```
+
+```{python}
+```
+
+```{python}
+```
+
+```{python}
+```
+
+```{python}
+```
+
+```{python}
+```
+
+```{python}
+```
+
+```{python}
+```
+
+```{python}
+```
+
+```{python}
+```
+
+```{python}
+```

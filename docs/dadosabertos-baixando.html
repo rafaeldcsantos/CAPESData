@@ -84,7 +84,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./dadosabertos-baixando.html">Dados Abertos</a></li><li class="breadcrumb-item"><a href="./dadosabertos-baixando.html">Baixando os dados</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./dadosabertos-baixando.html">Dados Abertos</a></li><li class="breadcrumb-item"><a href="./dadosabertos-baixando.html">Obtendo os dados</a></li></ol></nav>
         <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
@@ -156,7 +156,7 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./dadosabertos-baixando.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">Baixando os dados</span></a>
+ <span class="menu-text">Obtendo os dados</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -169,6 +169,12 @@ ul.task-list li input[type="checkbox"] {
   <div class="sidebar-item-container"> 
   <a href="./dadosabertos-comparativo-idade-discentes.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Idades dos Discentes</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./dadosabertos-coautorias.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Coautorias</span></a>
   </div>
 </li>
       </ul>
@@ -200,7 +206,7 @@ ul.task-list li input[type="checkbox"] {
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./dadosabertos-baixando.html">Dados Abertos</a></li><li class="breadcrumb-item"><a href="./dadosabertos-baixando.html">Baixando os dados</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./dadosabertos-baixando.html">Dados Abertos</a></li><li class="breadcrumb-item"><a href="./dadosabertos-baixando.html">Obtendo os dados</a></li></ol></nav>
 <div class="quarto-title">
 <h1 class="title">Baixando Dados Abertos da CAPES</h1>
 </div>
@@ -238,7 +244,7 @@ Atenção!
 <p>Por usar como fonte a Plataforma Sucupira os conjuntos de dados nas coleções cobrem até a última avaliação anual: em Maio de 2024, somente os dados até 2022 estavam disponíveis.</p>
 <p>Para acessar as coleções vá ao portal <a href="https://dadosabertos.capes.gov.br/">Dados Abertos CAPES</a>. No portal são listados vários temas, como mostrados na figura abaixo.</p>
 <p><a href="Resources/Images/Dadosabertos-portal.webp" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img src="Resources/Images/Dadosabertos-portal.webp" class="img-fluid"></a></p>
-<p>Para as análises deste documento vamos usar o tema <em>Avaliação da Pós-Graduação <em>Stricto Sensu</em>:</em></p>
+<p>Para as análises deste documento vamos usar o tema <em>Avaliação da Pós-Graduação Stricto Sensu</em>:</p>
 <p><a href="Resources/Images/Dadosabertos-avaliacao.webp" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img src="Resources/Images/Dadosabertos-avaliacao.webp" class="img-fluid"></a></p>
 <p>Selecionando esta opção aparecerá uma página onde podemos selecionar os conjuntos de dados por categoria ou filtrando por palavra-chave. Ao fazer uma busca ou seleção aparecerão descritores dos conjuntos, identificados por título e período de cobertura, como mostrado a seguir.</p>
 <p><a href="Resources/Images/Dadosabertos-discentes-1.webp" class="lightbox" data-gallery="quarto-lightbox-gallery-3"><img src="Resources/Images/Dadosabertos-discentes-1.webp" class="img-fluid"></a></p>
@@ -258,10 +264,10 @@ Tabela&nbsp;1: Arquivos com dados sobre cursos
 <div aria-describedby="tbl-abertos-baixando-cursos-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <table class="table-striped table-hover table">
 <colgroup>
-<col style="width: 65%">
-<col style="width: 12%">
-<col style="width: 12%">
-<col style="width: 10%">
+<col style="width: 45%">
+<col style="width: 18%">
+<col style="width: 18%">
+<col style="width: 18%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -351,10 +357,10 @@ Tabela&nbsp;2: Arquivos com dados sobre docentes
 <div aria-describedby="tbl-abertos-baixando-docentes-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <table class="table-striped table-hover table">
 <colgroup>
-<col style="width: 65%">
-<col style="width: 12%">
-<col style="width: 12%">
-<col style="width: 10%">
+<col style="width: 45%">
+<col style="width: 18%">
+<col style="width: 18%">
+<col style="width: 18%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -452,10 +458,10 @@ Tabela&nbsp;3: Arquivos com dados sobre discentes
 <div aria-describedby="tbl-abertos-baixando-discentes-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <table class="table-striped table-hover table">
 <colgroup>
-<col style="width: 65%">
-<col style="width: 12%">
-<col style="width: 12%">
-<col style="width: 10%">
+<col style="width: 45%">
+<col style="width: 18%">
+<col style="width: 18%">
+<col style="width: 18%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -601,7 +607,7 @@ Atenção!
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Cada um dos conjuntos de dados sobre produção intelectual pode ter várias planilhas associadas, correspondentes aos subtipos das produção intelectual. Em alguns casos um tipo e subtipo pode ter duas planilhas associadas, para divisão dos dados, evitando arquivos desnecessariamente grandes.</p>
+<p>Cada um dos conjuntos de dados sobre produção intelectual pode ter várias planilhas associadas, correspondentes aos subtipos das produção intelectual. Em alguns casos um tipo e subtipo pode ter duas planilhas associadas, para divisão dos dados, evitando arquivos muito grandes.</p>
 </div>
 </div>
 <p>Para os exemplos nas outras seções usaremos somente as produções do tipo <strong>técnica</strong> e Subtipo <strong>Cartas, Mapas ou Similares</strong> e do tipo <strong>Bibliográfica</strong> e Subtipo <strong>Artigo em Periódico</strong>.</p>
@@ -614,10 +620,10 @@ Tabela&nbsp;4: Arquivos com dados sobre Cartas, Mapas ou Similares
 <div aria-describedby="tbl-abertos-baixando-cartas-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <table class="table-striped table-hover table">
 <colgroup>
-<col style="width: 65%">
-<col style="width: 12%">
-<col style="width: 12%">
-<col style="width: 10%">
+<col style="width: 45%">
+<col style="width: 18%">
+<col style="width: 18%">
+<col style="width: 18%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -666,10 +672,10 @@ Tabela&nbsp;5: Arquivos com dados sobre Artigos em Periódicos
 <div aria-describedby="tbl-abertos-baixando-artpe-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <table class="table-striped table-hover table">
 <colgroup>
-<col style="width: 65%">
-<col style="width: 12%">
-<col style="width: 12%">
-<col style="width: 10%">
+<col style="width: 45%">
+<col style="width: 18%">
+<col style="width: 18%">
+<col style="width: 18%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -1143,7 +1149,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     </div>
   </div>
 </footer>
-<script>var lightboxQuarto = GLightbox({"selector":".lightbox","descPosition":"bottom","closeEffect":"zoom","loop":false,"openEffect":"zoom"});
+<script>var lightboxQuarto = GLightbox({"loop":false,"closeEffect":"zoom","selector":".lightbox","openEffect":"zoom","descPosition":"bottom"});
 window.onload = () => {
   lightboxQuarto.on('slide_before_load', (data) => {
     const { slideIndex, slideNode, slideConfig, player, trigger } = data;

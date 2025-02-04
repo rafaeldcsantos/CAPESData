@@ -22,14 +22,14 @@ import plotly.express as px
 
 ### Qual é o perfil de nossa produção tecnológica?
 
-Podemos ver a quantidade e proporção dos diferentes tipos de produção tecnológica com um gráfico do tipo _sunburst_. Primeiro lemos o *dataframe* com toda a produção unificada:
+Podemos ver a quantidade e proporção dos diferentes tipos de produção tecnológica com um gráfico do tipo *sunburst*. Primeiro lemos o *dataframe* com toda a produção unificada:
 
 ```{python}
 dir = "Resources/Data/ColetaSucupira/"
 df = pd.read_csv(dir+"CategoriaDeAutoresPorProdução-Unificada.csv")
 ```
 
-Para criar um gráfico do tipo _sunburst_ é preciso agrupar os dados do _dataframe_ pelos níveis hierárquicos desejados, calculando a quantidade de itens que pertence a cada combinação dos níveis. O código a seguir faz isto:
+Para criar um gráfico do tipo *sunburst* é preciso agrupar os dados do *dataframe* pelos níveis hierárquicos desejados, calculando a quantidade de itens que pertence a cada combinação dos níveis. O código a seguir faz isto:
 
 ```{python}
 dfAgrupado = df.groupby(['Tipo da Produção', 'Subtipo da Produção']).\
@@ -43,7 +43,7 @@ fig.update_traces(hovertemplate='<b>Tipo:</b> %{label}<br>'+
 fig.show()
 ```
 
-### Qual é a evolução da nossa produção tecnológica? 
+### Qual é a evolução da nossa produção tecnológica?
 
 Podemos ver o total por ano das produções tecnológicas de nosso programa com um gráfico de barras. Primeiro é preciso agrupar as produções por ano:
 
@@ -65,9 +65,9 @@ fig.update_layout(title='Produções Intelectuais por Ano',
 fig.show()    
 ```
 
-Podemos detalhar o gráfico usando cores diferentes para cada tipo e subtipo da produção. Como temos 14 ou mais combinações de tipos e subtipos será melhor fazer dois gráficos separados, um para `Tipo da Produção` = `BIBLIOGRÁFICA` e outro para `Tipo da Produção` = `TÉCNICA`. 
+Podemos detalhar o gráfico usando cores diferentes para cada tipo e subtipo da produção. Como temos 14 ou mais combinações de tipos e subtipos será melhor fazer dois gráficos separados, um para `Tipo da Produção` = `BIBLIOGRÁFICA` e outro para `Tipo da Produção` = `TÉCNICA`.
 
-Vamos começar com as produções bibliográficas, criando um subconjunto do _dataframe_ completo e agrupando por ano e subtipo:
+Vamos começar com as produções bibliográficas, criando um subconjunto do *dataframe* completo e agrupando por ano e subtipo:
 
 ```{python}
 dfProdBibliográfica = df[df['Tipo da Produção'] == 'BIBLIOGRÁFICA']
@@ -111,9 +111,9 @@ fig.update_layout(title='Produções Técnicas por Ano',
 fig.show()
 ```
 
-### Qual é a evolução da nossa produção tecnológica (com coautoria discente)? 
+### Qual é a evolução da nossa produção tecnológica (com coautoria discente)?
 
-Vamos ver quanto da nossa produção tecnológica tem coautoria discente por ano. Para isto preciso separar o _dataframe_ em dois complementares, e agrupar estes dois pelo ano da produção:
+Vamos ver quanto da nossa produção tecnológica tem coautoria discente por ano. Para isto preciso separar o *dataframe* em dois complementares, e agrupar estes dois pelo ano da produção:
 
 ```{python}
 dfProdComDisc = df[df['Discente'] > 0]
@@ -143,7 +143,7 @@ fig.update_layout(
 fig.show()
 ```
 
-Mas queremos visualizar também as produções bibliográficas com coautoria por ano. Vamos refazer o _dataframe_ com este filtro adicional: 
+Mas queremos visualizar também as produções bibliográficas com coautoria por ano. Vamos refazer o *dataframe* com este filtro adicional:
 
 ```{python}
 dfProdComDisc = dfProdBibliográfica[dfProdBibliográfica['Discente'] > 0]
@@ -173,9 +173,9 @@ fig.update_layout(
 fig.show()
 ```
 
-### Qual é a evolução da nossa produção tecnológica (com único autor)? 
+### Qual é a evolução da nossa produção tecnológica (com único autor)?
 
-Um dos indicadores da interdisciplinaridade é a quantidade de publicações em coautorias. Para verificar o histórico destas publicações vamos criar um novo campo para o _dataframe_ original que contém a quantidade de autores independente da categoria:
+Um dos indicadores da interdisciplinaridade é a quantidade de publicações em coautorias. Para verificar o histórico destas publicações vamos criar um novo campo para o *dataframe* original que contém a quantidade de autores independente da categoria:
 
 ```{python}
 df['NumAutores'] = df[['Docente', 'Egresso', 'Participante Externo', \
@@ -188,7 +188,7 @@ Vamos considerar somente produções do tipo `BIBLIOGRÁFICA`:
 dfProdBibliográfica = df[df['Tipo da Produção'] == 'BIBLIOGRÁFICA']
 ```
 
-Com isto podemos criar os _dataframes_ filtrados: 
+Com isto podemos criar os *dataframes* filtrados:
 
 ```{python}
 dfProdCom1 = dfProdBibliográfica[dfProdBibliográfica['NumAutores'] == 1]
@@ -216,67 +216,50 @@ fig.update_layout(
 fig.show()
 ```
 
+```{python}
+```
 
 ```{python}
 ```
 
+```{python}
+```
 
 ```{python}
 ```
 
+```{python}
+```
 
 ```{python}
 ```
 
+```{python}
+```
 
 ```{python}
 ```
 
+```{python}
+```
 
 ```{python}
 ```
 
+```{python}
+```
 
 ```{python}
 ```
 
+```{python}
+```
 
 ```{python}
 ```
 
-
 ```{python}
 ```
 
-
 ```{python}
 ```
-
-
-```{python}
-```
-
-
-```{python}
-```
-
-
-```{python}
-```
-
-
-```{python}
-```
-
-
-```{python}
-```
-
-
-```{python}
-```
-
-
-```{python}
-```
-

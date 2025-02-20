@@ -1,0 +1,220 @@
+---
+title: "Análise Básica de Dados da Plataforma Sucupira - Tempo de Titulação"
+lightbox: true
+lang: pt
+---
+
+## Sobre
+
+Neste documento veremos como criar alguns gráficos sobre o tempo de titulação dos discentes do programa. 
+
+Na seção [Baixando os dados](sucupira-baixando.qmd#como-obter-os-dados) obtivemos vários dados da Plataforma Sucupira, inclusive dados sobre discentes. Os dados foram baixados de duas fontes diferentes na plataforma: planilhas com dados já homologados e a planilha do ano corrente. Como as duas fontes criam arquivos com estruturas diferentes precisamos unificá-las em um *dataframe*. 
+
+## Unificando os dados
+
+Antes de iniciar o processamento de dados para unificação das planilhas vamos importar as bibliotecas necessárias:
+
+```{python}
+import pandas as pd
+import glob
+import re
+import warnings
+from datetime import datetime
+import plotly.graph_objs as go
+import plotly.express as px
+import plotly.colors as pc
+```
+
+Os dados sobre os discentes de cada ano estão nas abas `Discentes` das planilhas baixadas anteriormente. A figura abaixo mostra a aba, com alguns campos expandidos:
+
+![](Resources/Images/Sucupira-planilha-discente-anos-anteriores.webp){.lightbox}
+
+Podemos ver que dados dos discentes podem ocupar mais de uma linha na planilha, caso tenham mais de um orientador e/ou mais de uma situação no ano da coleta. Como queremos somente os dados de alunos cuja `Situação Discente` seja igual a `TITULADO` basta considerar somente estas linhas das planilhas e remover as duplicadas (que ocorrerão quando tivermos mais de um orientador).
+
+```{python}
+def preprocessaDiscentesTitulados(arquivo):
+    # Lemos a planilha
+    with warnings.catch_warnings():
+        warnings.filterwarnings("ignore", category=UserWarning, 
+                                module=re.escape('openpyxl.styles.stylesheet'))
+        df = pd.read_excel(arquivo,engine='openpyxl',sheet_name='Discentes')  
+    # Definimos as colunas de interesse.
+    colunas = [
+        "Ano do Calendário",
+        "Nome Discente", 
+        "Nível Discente", 
+        "Situação Discente", 
+        "Data Matrícula", 
+        "Data Titulação"
+    ]
+    # Filtramos pelas colunas.
+    df = df[colunas]
+    # Garantimos que estes campos serão datas:
+    df["Data Matrícula"] = pd.to_datetime(df["Data Matrícula"], format="%d/%m/%Y")
+    df["Data Titulação"] = pd.to_datetime(df["Data Titulação"], format="%d/%m/%Y")
+    # Filtramos por 'TITULADO'
+    df_filtered = df[df["Situação Discente"] == "TITULADO"]    
+    # Removemos duplicatas
+    df_filtered = df_filtered.drop_duplicates(subset=colunas, keep='first')
+    return df_filtered
+```
+
+::: callout-info
+As abas `Discentes` das planilhas de anos anteriores ao atual tem outras informações que podem ser interessantes para análise de discentes por gênero e raça. Ignoraremos estes dados pois os mesmos não estão disponíveis na planilha do ano corrente.
+:::
+
+Com isto podemos criar um *dataframe* com todas as planilhas de anos anteriores:
+
+```{python}
+dir = "Resources/Data/ColetaSucupira/"
+fileNames = glob.glob(dir+"relatorio_dados_enviados_coleta_20??.xlsx")
+dfs = []
+for file in fileNames:
+    df = preprocessaDiscentesTitulados(file)
+    dfs.append(df)
+dfconcatenado = pd.concat(dfs, ignore_index=True)   
+```
+
+Vamos ver parte do *dataframe*:
+
+```{python}
+dfconcatenado
+```
+
+Já é possível observar alguns erros de preenchimento, que serão processados posteriormente. 
+
+Como queremos também usar os dados da planilha do ano corrente precisamos importá-la, filtrar os dados e converter em um *dataframe* para unificação (mantendo os mesmos campos). Mas a planilha dos dados do ano corrente tem algumas diferenças: como mostrado na seção [Baixando os dados](sucupira-baixando.qmd#como-obter-os-dados) a planilha tem somente uma aba (`Discentes - Orientadores`), não apresenta o ano do calendário e tem um campo `Data Situação` em vez de `Data Titulação`, comforme mostrado na figura a seguir.
+
+![](Resources/Images/Sucupira-planilha-discente-ano-atual.webp){.lightbox}
+
+Precisaremos de uma função modificada para ler esta planilha para unificá-la com os dados dos anos passados:
+
+```{python}
+def preprocessaDiscentesTituladosAnoAtual(arquivo,ano_calendario):
+    # Lemos a planilha
+    with warnings.catch_warnings():
+        warnings.filterwarnings("ignore", category=UserWarning, 
+                                module=re.escape('openpyxl.styles.stylesheet'))
+        df = pd.read_excel(arquivo,engine='openpyxl',sheet_name='Discentes - Orientadores')  
+    # Definimos as colunas de interesse.
+    colunas = [
+        "Nome Discente", 
+        "Nível Discente", 
+        "Situação Discente", 
+        "Data Matrícula", 
+        "Data Situação" # Campo com nome diferente!
+    ]
+    # Filtramos pelas colunas.
+    df = df[colunas]
+    # Indicamos o ano do calendário explicitamente.
+    df["Ano do Calendário"] = ano_calendario
+    # Garantimos que estes campos serão datas:
+    df["Data Matrícula"] = pd.to_datetime(df["Data Matrícula"], format="%d/%m/%Y")
+    df["Data Situação"] = pd.to_datetime(df["Data Situação"], format="%d/%m/%Y")
+    # Filtramos por 'TITULADO'
+    df_filtered = df[df["Situação Discente"] == "TITULADO"]    
+    # Removemos duplicatas
+    df_filtered = df_filtered.drop_duplicates(subset=colunas, keep='first')
+    # Renomeamos 'Data Situação' para 'Data Titulação'
+    df_filtered.rename(columns={"Data Situação": "Data Titulação"}, inplace=True)
+    return df_filtered
+```
+
+Todos os *dataframes* podem ser unificados com:
+
+```{python}
+arquivo = dir+"Discentes2024.xlsx"
+dfAnoAtual = preprocessaDiscentesTituladosAnoAtual(arquivo,2024)
+df = pd.concat([dfconcatenado, dfAnoAtual], ignore_index=True)
+```
+
+
+## Pequenas correções
+
+Uma rápida vista nos dados importados mostra que existem alguns erros de preenchimento que acabaram passando para as planilhas. Os mais óbvios são sobre as datas de matrícula, que em alguns casos tem o mesmo ano que as datas de titulação. Verifiquemos com uma contagem mais flexível, que indica quantos mestres se formaram em menos de 18 meses e quantos doutores em menos de 24:
+
+```{python}
+df["Tempo de Titulação (meses)"] = (df["Data Titulação"] - df["Data Matrícula"]).dt.days / 30
+# Contamos casos suspeitos:
+mMin = 18
+dMin = 24
+mErro = df[(df["Nível Discente"] == "Mestrado") & (df["Tempo de Titulação (meses)"] < mMin)].shape[0]
+dErro = df[(df["Nível Discente"] == "Doutorado") & (df["Tempo de Titulação (meses)"] < dMin)].shape[0]
+mErro,dErro
+```
+
+
+Podemos descartar os dados suspeitos com estas linhas:
+
+```{python}
+dfOK = df[
+    ~(
+        ((df["Nível Discente"] == "Mestrado") & (df["Tempo de Titulação (meses)"] < mMin)) |
+        ((df["Nível Discente"] == "Doutorado") & (df["Tempo de Titulação (meses)"] < dMin))
+    )
+]
+```
+
+
+Podemos armazenar este *dataframe* em um arquivo para outros usos:
+
+```{python}
+dfOK.to_csv(dir+"Discentes-TempoDeTitulacao.csv",index=False)                                     
+```
+
+
+## Análise Exploratória de Dados
+
+Vamos ver duas séries de boxplots, uma para o mestrado:
+
+```{python}
+df_mes = dfOK[dfOK["Nível Discente"] == "Mestrado"]
+count_mes = df_mes["Ano do Calendário"].value_counts().sort_index()
+# Criamos o box plot para Mestrado
+fig = px.box(df_mes, 
+             x="Ano do Calendário", 
+             y="Tempo de Titulação (meses)", 
+             title="Distribuição do Tempo de Titulação - Mestrado",
+             labels={"Tempo de Titulação (meses)": "Tempo de Titulação (meses)", 
+                     "Ano do Calendário": "Ano"},
+             color_discrete_sequence=["#F3801B"])
+# Adiciono linhas para os prazos.
+fig.add_hline(y=24, line_color="blue", annotation_text="24 meses", annotation_position="top left")
+fig.add_hline(y=36, line_color="red", annotation_text="36 meses", annotation_position="top left")
+# Ajusto para o eixo Y iniciar de zero.
+max_y_mes = df_mes["Tempo de Titulação (meses)"].max() + 6
+fig.update_yaxes(range=[0, max_y_mes])
+# Adicionamos número de titulados por ano no gráfico de Mestrado
+for ano, count in count_mes.items():
+    fig.add_annotation(x=ano, y=max_y_mes-3, text=f"{count} titulados", 
+                       showarrow=False, font=dict(size=12, color="black"))
+fig.show()                                                 
+```
+
+E uma para o doutorado: 
+
+```{python}
+df_dou = dfOK[dfOK["Nível Discente"] == "Doutorado"]
+count_dou = df_dou["Ano do Calendário"].value_counts().sort_index()
+anos_ordenados = sorted(df_dou["Ano do Calendário"].unique())
+# Criamos o box plot para Doutorado
+fig = px.box(df_dou, 
+             x="Ano do Calendário", 
+             y="Tempo de Titulação (meses)", 
+             title="Distribuição do Tempo de Titulação - Doutorado",
+             labels={"Tempo de Titulação (meses)": "Tempo de Titulação (meses)", 
+                     "Ano do Calendário": "Ano"},
+             color_discrete_sequence=["#1268AF"])
+# Adiciono linhas para os prazos.
+fig.add_hline(y=36, line_color="blue", annotation_text="36 meses", annotation_position="top left")
+fig.add_hline(y=60, line_color="red", annotation_text="60 meses", annotation_position="top left")
+# Ajusto para o eixo Y iniciar de zero.
+max_y_dou = df_dou["Tempo de Titulação (meses)"].max() + 6
+fig.update_yaxes(range=[0, max_y_dou])
+fig.update_xaxes(dtick=1)
+# Adicionamos número de titulados por ano no gráfico de Doutorado
+for ano, count in count_dou.items():
+    fig.add_annotation(x=ano, y=max_y_dou-3, text=f"{count} titulados", 
+                       showarrow=False, font=dict(size=12, color="black"))
+fig.show()        
+```

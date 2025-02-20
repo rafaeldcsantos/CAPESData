@@ -43,7 +43,7 @@ relatorio_dados_enviados_coleta_2022.xlsx
 relatorio_dados_enviados_coleta_2023.xlsx
 ```
 
-### Dados do preenchimento do ano corrente
+### Dados do preenchimento do ano corrente - Produção Intelectual
 
 As planilhas baixadas através do procedimento mostrado na seção anterior contém dados que já foram enviados para a CAPES, mas não os dados sendo preenchidos no ano corrente. Se for necessário baixar alguns dos dados do preenchimento podemos fazê-lo para algumas categorias.
 
@@ -51,11 +51,19 @@ As planilhas baixadas através do procedimento mostrado na seção anterior cont
 
 Como veremos alguns exemplos de análise de publicações vamos baixar a planilha de publicações **do ano corrente**. Acesse, no Portal do Coordenador de PPG da Plataforma Sucupira, o menu `Coleta Online`/`Relatórios`/`Conferência do Programa`, como ilustrado na figura abaixo:
 
-![](Resources/Images/Sucupira-onde-obter-planilhas-anos-atuais-1.webp){.lightbox} Para baixar a planilha com dados de publicações do ano corrente (claro, somente com as que o coordenador tiver importado ou cadastrado na Plataforma Sucupira) selecione a categoria `Produção Intelectual`, use como Ano de Referência o ano corrente, selecione a opção de exportar relatório para XLS e como tipo de relatório selecione `Lista replicada de produções intelectuais com informação de autores` -- esta será a opção mais adequada para os relatórios deste estudo. As opções sugeridas são mostradas na figura abaixo.
+![](Resources/Images/Sucupira-onde-obter-planilhas-anos-atuais-1.webp){.lightbox} 
+
+Para baixar a planilha com dados de publicações do ano corrente (claro, somente com as que o coordenador tiver importado ou cadastrado na Plataforma Sucupira) selecione a categoria `Produção Intelectual`, use como Ano de Referência o ano corrente, selecione a opção de exportar relatório para XLS e como tipo de relatório selecione `Lista replicada de produções intelectuais com informação de autores` -- esta será a opção mais adequada para os relatórios deste estudo. As opções sugeridas são mostradas na figura abaixo.
 
 ![](Resources/Images/Sucupira-onde-obter-planilhas-anos-atuais-2.webp){.lightbox}
 
-Clique em `Gerar Relatório` e aguarde o *link* para baixar a planilha. Renomeie-a para `ListaReplicadaComAutores.xls`.
+Clique em `Gerar Relatório` e aguarde o *link* para baixar a planilha. Renomeie-a para `ListaReplicadaComAutores2024.xlsx` (2024 sendo o ano corrente).
+
+### Dados do preenchimento do ano corrente - Discentes
+
+Vamos também baixar a planilha com dados dos discentes do ano corrente (que ainda não foram enviados para o Coleta). No Portal do Coordenador de PPG da Plataforma Sucupira, o menu `Coleta Online`/`Relatórios`/`Conferência do Programa`, selecione a categoria `Discente`, use como Ano de Referência o ano corrente, selecione a opção de exportar relatório para XLS e como tipo de relatório selecione `Lista replicada de discente, com informação de Orientador(es)`.  
+
+Clique em `Gerar Relatório` e aguarde o *link* para baixar a planilha. Renomeie-a para `Discentes2024.xlsx` (2024 sendo o ano corrente).
 
 ::: callout-note
 É possível obter esta planilha mesmo após a submissão e homologação do Coleta do ano de referência.

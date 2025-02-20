@@ -1,0 +1,315 @@
+---
+title: "Untitled"
+format: html
+---
+
+```{python}
+CAPES_AREA_MAP = {
+    1: "MATEMÁTICA / PROBABILIDADE E ESTATÍSTICA",
+    2: "CIÊNCIA DA COMPUTAÇÃO",
+    3: "ASTRONOMIA / FÍSICA",
+    4: "QUÍMICA",
+    5: "GEOCIÊNCIAS",
+    6: "CIÊNCIAS BIOLÓGICAS I",
+    7: "BIODIVERSIDADE",
+    8: "CIÊNCIAS BIOLÓGICAS II",
+    9: "CIÊNCIAS BIOLÓGICAS III",
+    10: "ENGENHARIAS I",
+    11: "ARTES",
+    12: "ENGENHARIAS II",
+    13: "ENGENHARIAS III",
+    14: "ENGENHARIAS IV",
+    15: "MEDICINA I",
+    16: "MEDICINA II",
+    17: "MEDICINA III",
+    18: "ODONTOLOGIA",
+    19: "FARMÁCIA",
+    20: "ENFERMAGEM",
+    21: "EDUCAÇÃO FÍSICA",
+    22: "SAÚDE COLETIVA",
+    23: "ZOOTECNIA / RECURSOS PESQUEIROS",
+    24: "MEDICINA VETERINÁRIA",
+    25: "CIÊNCIA DE ALIMENTOS",
+    26: "DIREITO",
+    27: "ADMINISTRAÇÃO PÚBLICA E DE EMPRESAS, CIÊNCIAS CONTÁBEIS E TURISMO",
+    28: "ECONOMIA",
+    29: "ARQUITETURA, URBANISMO E DESIGN",
+    30: "PLANEJAMENTO URBANO E REGIONAL / DEMOGRAFIA",
+    31: "COMUNICAÇÃO E INFORMAÇÃO",
+    32: "SERVIÇO SOCIAL",
+    33: "FILOSOFIA",
+    34: "SOCIOLOGIA",
+    35: "ANTROPOLOGIA / ARQUEOLOGIA",
+    36: "GEOGRAFIA",
+    37: "PSICOLOGIA",
+    38: "EDUCAÇÃO",
+    39: "CIÊNCIA POLÍTICA E RELAÇÕES INTERNACIONAIS",
+    40: "HISTÓRIA",
+    41: "LINGUÍSTICA E LITERATURA",
+    42: "CIÊNCIAS AGRÁRIAS I",
+    44: "CIÊNCIAS DA RELIGIÃO E TEOLOGIA",
+    45: "INTERDISCIPLINAR",
+    46: "ENSINO",
+    47: "MATERIAIS",
+    48: "BIOTECNOLOGIA",
+    49: "CIÊNCIAS AMBIENTAIS",
+    50: "NUTRIÇÃO"
+}
+
+```
+
+
+```{python}
+import json
+import pandas as pd
+import plotly.express as px
+
+# Define the file path
+file_path = "Resources/Data/Unsupported/sexo.json"
+
+# Read the JSON file line by line
+json_data = []
+with open(file_path, "r", encoding="utf-8") as file:
+    for line in file:
+        try:
+            json_data.append(json.loads(line))  # Load each line separately
+        except json.JSONDecodeError as e:
+            print(f"Error decoding JSON on line: {line}\nError: {e}")
+
+# Convert JSON data to DataFrame
+data = []
+for record in json_data:
+    if record.get("estado") == "SP":  # Filter for São Paulo (SP)
+        contadores = record["contadores"]["acumulador"]
+        data.append({
+            "FEMININO": int(contadores["FEMININO"]["$numberInt"]),
+            "MASCULINO": int(contadores["MASCULINO"]["$numberInt"]),
+            "NÃO INFORMADO": int(contadores["NÃO INFORMADO"]["$numberInt"])
+        })
+
+# Convert to Pandas DataFrame
+df = pd.DataFrame(data)
+
+# Aggregate totals
+sex_totals = df.sum()
+
+# Create pie chart
+fig = px.pie(
+    names=sex_totals.index,
+    values=sex_totals.values,
+    title="Distribuição de Estudantes por Sexo em São Paulo (SP)",
+    labels={"names": "Sexo", "values": "Quantidade"}
+)
+
+# Show the plot
+fig.show()
+```
+
+
+
+
+```{python}
+import json
+import pandas as pd
+import plotly.graph_objects as go
+from plotly.subplots import make_subplots
+
+# Define the file path
+file_path = "Resources/Data/Unsupported/sexo.json"
+
+# Load the JSON file line by line (handling line-delimited JSON)
+json_data = []
+with open(file_path, "r", encoding="utf-8") as file:
+    for line in file:
+        try:
+            json_data.append(json.loads(line))
+        except json.JSONDecodeError as e:
+            print(f"Error decoding JSON on line: {line}\nError: {e}")
+
+# CAPES Area Map
+CAPES_AREA_MAP = {
+    1: "MATEMÁTICA / PROBABILIDADE E ESTATÍSTICA", 2: "CIÊNCIA DA COMPUTAÇÃO", 3: "ASTRONOMIA / FÍSICA",
+    4: "QUÍMICA", 5: "GEOCIÊNCIAS", 6: "CIÊNCIAS BIOLÓGICAS I", 7: "BIODIVERSIDADE",
+    8: "CIÊNCIAS BIOLÓGICAS II", 9: "CIÊNCIAS BIOLÓGICAS III", 10: "ENGENHARIAS I",
+    11: "ARTES", 12: "ENGENHARIAS II", 13: "ENGENHARIAS III", 14: "ENGENHARIAS IV",
+    15: "MEDICINA I", 16: "MEDICINA II", 17: "MEDICINA III", 18: "ODONTOLOGIA",
+    19: "FARMÁCIA", 20: "ENFERMAGEM", 21: "EDUCAÇÃO FÍSICA", 22: "SAÚDE COLETIVA",
+    23: "ZOOTECNIA / RECURSOS PESQUEIROS", 24: "MEDICINA VETERINÁRIA", 25: "CIÊNCIA DE ALIMENTOS",
+    26: "DIREITO", 27: "ADMINISTRAÇÃO, CIÊNCIAS CONTÁBEIS E TURISMO", 28: "ECONOMIA",
+    29: "ARQUITETURA, URBANISMO E DESIGN", 30: "PLANEJAMENTO URBANO / DEMOGRAFIA",
+    31: "COMUNICAÇÃO E INFORMAÇÃO", 32: "SERVIÇO SOCIAL", 33: "FILOSOFIA", 34: "SOCIOLOGIA",
+    35: "ANTROPOLOGIA / ARQUEOLOGIA", 36: "GEOGRAFIA", 37: "PSICOLOGIA", 38: "EDUCAÇÃO",
+    39: "CIÊNCIA POLÍTICA E RELAÇÕES INTERNACIONAIS", 40: "HISTÓRIA", 41: "LINGUÍSTICA E LITERATURA",
+    42: "CIÊNCIAS AGRÁRIAS I", 44: "CIÊNCIAS DA RELIGIÃO E TEOLOGIA", 45: "INTERDISCIPLINAR",
+    46: "ENSINO", 47: "MATERIAIS", 48: "BIOTECNOLOGIA", 49: "CIÊNCIAS AMBIENTAIS", 50: "NUTRIÇÃO"
+}
+
+# Function to format area titles with line breaks and area number
+def format_area_title(area_code, area_name, max_words=3):
+    words = area_name.split()
+    if len(words) > max_words:
+        # Insert line break after 'max_words' words
+        formatted_title = "<br>".join([" ".join(words[i:i + max_words]) for i in range(0, len(words), max_words)])
+    else:
+        formatted_title = area_name
+    return f"{formatted_title}<br>({area_code})"
+
+# Process the data
+area_sex_data = {area: {"FEMININO": 0, "MASCULINO": 0, "NÃO INFORMADO": 0} for area in CAPES_AREA_MAP.keys()}
+
+for record in json_data:
+    area_code = int(record["area"]) if record["area"].isdigit() else None
+    if area_code and area_code in area_sex_data:
+        contadores = record["contadores"]["acumulador"]
+        area_sex_data[area_code]["FEMININO"] += int(contadores["FEMININO"]["$numberInt"])
+        area_sex_data[area_code]["MASCULINO"] += int(contadores["MASCULINO"]["$numberInt"])
+        area_sex_data[area_code]["NÃO INFORMADO"] += int(contadores["NÃO INFORMADO"]["$numberInt"])
+
+# Create a 5x10 grid of pie charts with improved titles
+formatted_titles = [format_area_title(code, name) for code, name in CAPES_AREA_MAP.items()]
+
+fig = make_subplots(rows=10, cols=5, subplot_titles=formatted_titles, specs=[[{"type": "domain"}]*5]*10)
+
+row, col = 1, 1
+for area_code, sex_counts in area_sex_data.items():
+    values = list(sex_counts.values())
+    labels = list(sex_counts.keys())
+
+    if sum(values) > 0:  # Avoid empty charts
+        fig.add_trace(
+            go.Pie(labels=labels, values=values, showlegend=False, textinfo="percent"),
+            row=row, col=col
+        )
+
+    # Update row and column for next plot
+    col += 1
+    if col > 5:  # Move to the next row after 5 columns
+        col = 1
+        row += 1
+
+
+
+# Update layout with increased top margin
+fig.update_layout(
+    title_text="Distribuição de Estudantes por Sexo em Cada Área",
+    title_x=0.5,  # Center the title
+    title_y=0.99,  # Adjust the title position slightly lower
+    margin=dict(t=120, b=50, l=50, r=50),  # Increase top margin (t=250)
+    height=2000, width=1200
+)
+
+# Show the plot
+fig.show()
+
+```
+
+
+
+```{python}
+import json
+import plotly.graph_objects as go
+from plotly.subplots import make_subplots
+
+# Define file path for JSON data
+file_path = "Resources/Data/Unsupported/sexo.json"
+
+# Load JSON data (handling line-delimited format)
+json_data = []
+with open(file_path, "r", encoding="utf-8") as file:
+    for line in file:
+        try:
+            json_data.append(json.loads(line))
+        except json.JSONDecodeError as e:
+            print(f"Error decoding JSON on line: {line}\nError: {e}")
+
+# Define the region-to-state mapping
+region_map = {
+    "CENTRO-OESTE": ["DF", "GO", "MT", "MS"],
+    "NORDESTE": ["PB", "PE", "RN", "MA", "BA", "CE", "SE", "AL", "PI"],
+    "NORTE": ["PA", "AM", "AC", "RO", "TO", "AP", "RR"],
+    "SUDESTE": ["SP", "RJ", "MG", "ES"],
+    "SUL": ["PR", "SC", "RS"]
+}
+
+# Reverse the mapping to get state-to-region
+state_to_region = {state: region for region, states in region_map.items() for state in states}
+
+# Filter records for Interdisciplinary area (45)
+interdisciplinary_data = [record for record in json_data if record["area"] == "45"]
+
+# Process the data - Group by state
+state_sex_data = {state: {"FEMININO": 0, "MASCULINO": 0, "NÃO INFORMADO": 0} for state in state_to_region.keys()}
+
+for record in interdisciplinary_data:
+    state = record["estado"]
+    if state in state_sex_data:  # Only consider valid states
+        contadores = record["contadores"]["acumulador"]
+        state_sex_data[state]["FEMININO"] += int(contadores["FEMININO"]["$numberInt"])
+        state_sex_data[state]["MASCULINO"] += int(contadores["MASCULINO"]["$numberInt"])
+        state_sex_data[state]["NÃO INFORMADO"] += int(contadores["NÃO INFORMADO"]["$numberInt"])
+
+# Remove states with zero total students
+state_sex_data = {state: counts for state, counts in state_sex_data.items() if sum(counts.values()) > 0}
+
+# If no states have data, print a warning and exit
+if not state_sex_data:
+    print("⚠ No data available for Interdisciplinary area (45) per state.")
+else:
+    # Get sorted list of states with their regions
+    sorted_states = sorted(state_sex_data.keys(), key=lambda x: (state_to_region.get(x, "ZZZ"), x))
+
+    # Determine the number of rows needed for a grid layout (5 columns)
+    num_states = len(sorted_states)
+    num_cols = 5
+    num_rows = max((num_states // num_cols) + (1 if num_states % num_cols else 0), 1)  # Ensure at least 1 row
+
+    # Define colors for regions
+    region_colors = {
+        "CENTRO-OESTE": "blue",
+        "NORDESTE": "green",
+        "NORTE": "orange",
+        "SUDESTE": "red",
+        "SUL": "purple"
+    }
+
+    # Create a grid of pie charts
+    fig = make_subplots(
+        rows=num_rows, cols=num_cols, 
+        subplot_titles=[f"{state} ({state_to_region[state]})" for state in sorted_states], 
+        specs=[[{"type": "domain"}] * num_cols] * num_rows
+    )
+
+    # Plot each state's pie chart
+    row, col = 1, 1
+    for state in sorted_states:
+        values = list(state_sex_data[state].values())
+        labels = list(state_sex_data[state].keys())
+        region = state_to_region[state]
+        color = region_colors.get(region, "gray")
+
+        fig.add_trace(
+            go.Pie(labels=labels, values=values, marker=dict(colors=["blue", "red", "gray"]), 
+                   showlegend=False, textinfo="percent"),
+            row=row, col=col
+        )
+
+        # Update row and column for next plot
+        col += 1
+        if col > num_cols:  # Move to the next row after 5 columns
+            col = 1
+            row += 1
+
+    # Update layout
+    fig.update_layout(
+        title_text="Distribuição de Estudantes por Sexo na Área Interdisciplinar por Estado",
+        title_x=0.5,  # Center the title
+        title_y=0.98,  # Adjust title position slightly lower
+        margin=dict(t=250, b=50, l=50, r=50),  # Increase top margin for readability
+        height=max(num_rows * 300, 1200), width=1200  # Adjust height dynamically
+    )
+
+    # Show the plot
+    fig.show()
+
+
+```

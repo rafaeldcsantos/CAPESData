@@ -163,14 +163,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./sucupira-preprocessamento.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Pré-processamento</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./sucupira-producao-eda.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Análise Básica</span></a>
+  <a href="./sucupira-tempotitulacao.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tempo de Titulação</span></a>
   </div>
 </li>
       </ul>
@@ -289,7 +283,7 @@ Atenção
 </section>
 <section id="lendo-e-filtrando-os-dados" class="level2">
 <h2 class="anchored" data-anchor-id="lendo-e-filtrando-os-dados">Lendo e filtrando os dados</h2>
-<div id="3f89560c" class="cell" data-execution_count="1">
+<div id="bf061b19" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> glob</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> re</span>
@@ -297,7 +291,7 @@ Atenção
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> IPython.display <span class="im">import</span> Markdown</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Para cada planilha vamos ler a aba <code>Produção Intelectual</code> da planilha, filtrar alguns campos que não são necessários e separar somente as linhas que tem nomes de autores. Como repetiremos estes passos para cada planilha é melhor definir uma função em Python que recebe o nome do arquivo e retorna um <em>dataframe</em> com os campos e linhas que precisamos:</p>
-<div id="54d5f47c" class="cell" data-execution_count="2">
+<div id="72fd179e" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> preprocessaProducoes(fileName):</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Lemos a planilha.</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> warnings.catch_warnings():</span>
@@ -315,26 +309,26 @@ Atenção
 </div>
 <p>A biblioteca usada para a leitura de planilhas gera advertências no código, para isto usamos filtros de alertas (veja mais detalhes <a href="https://stackoverflow.com/questions/66214951/deal-with-openpyxl-warning-workbook-contains-no-default-style-apply-openpyxl/77942784">aqui</a>).</p>
 <p>Os dados que precisamos estão todos armazenados em planilhas, uma por ano, em um diretório (a lista de planilhas para este documento pode ser vista <a href="./sucupira-baixando.html#arquivos-baixados-neste-exemplo">aqui</a>):</p>
-<div id="375ba451" class="cell" data-execution_count="3">
+<div id="8d5393ac" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="bu">dir</span> <span class="op">=</span> <span class="st">"Resources/Data/ColetaSucupira/"</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Podemos então criar uma lista de arquivos com nomes semelhantes no diretório indicado e uma lista de <em>dataframes</em> para receber os dados:</p>
-<div id="1f2c5182" class="cell" data-execution_count="4">
+<div id="4ef2581a" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>fileNames <span class="op">=</span> glob.glob(<span class="bu">dir</span><span class="op">+</span><span class="st">"relatorio_dados_enviados_coleta_20??.xlsx"</span>)</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>dfs <span class="op">=</span> []</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Agora podemos ler cada um destes arquivos, filtrar linhas e colunas e anexar o <em>dataframe</em> filtrado à lista de <em>dataframes</em>:</p>
-<div id="79f50699" class="cell" data-execution_count="5">
+<div id="44912d0e" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> <span class="bu">file</span> <span class="kw">in</span> fileNames:</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    df <span class="op">=</span> preprocessaProducoes(<span class="bu">file</span>)</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    dfs.append(df)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Em uma linha concatenaremos todos os <em>dataframes</em> da produção intelectual do conjunto de planilhas:</p>
-<div id="ffdf51d5" class="cell" data-execution_count="6">
+<div id="8edf66e1" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>dfconcatenado <span class="op">=</span> pd.concat(dfs, ignore_index<span class="op">=</span><span class="va">True</span>)    </span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Devemos manter somente as produções que <strong>não</strong> foram glosadas:</p>
-<div id="4f82dfa0" class="cell" data-execution_count="7">
+<div id="eaed8910" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co">#dfconcatenado = dfconcatenado[dfconcatenado['Produção Glosada?'] == 'Não']</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co">#dfconcatenado.drop(columns=['Produção Glosada?'], inplace=True)</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -343,7 +337,7 @@ Atenção
 </section>
 <section id="reescreva-o-texto" class="level1">
 <h1>reescreva o texto!</h1>
-<div id="2673cd62" class="cell" data-execution_count="8">
+<div id="b43bb5aa" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> determine_titulo_pub(subtipo, details):</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> subtipo <span class="op">==</span> <span class="st">"ARTIGO EM PERIÓDICO"</span>:</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> details.get(<span class="st">"ISSN / Título do periódico"</span>, <span class="va">None</span>)</span>
@@ -353,7 +347,7 @@ Atenção
 <span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> details.get(<span class="st">"Título da Obra"</span>, <span class="va">None</span>)</span>
 <span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="va">None</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="1705be9c" class="cell" data-execution_count="9">
+<div id="5d25aea4" class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Initialize a list to hold flattened rows</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>flattened_data <span class="op">=</span> []</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -391,7 +385,7 @@ Atenção
 <span id="cb9-35"><a href="#cb9-35" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert the flattened data to a DataFrame</span></span>
 <span id="cb9-36"><a href="#cb9-36" aria-hidden="true" tabindex="-1"></a>flattened_df <span class="op">=</span> pd.DataFrame(flattened_data)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="e9cdae3f" class="cell" data-execution_count="10">
+<div id="0c3c6a3d" class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>Markdown(flattened_df.head(<span class="dv">10</span>).to_markdown(index<span class="op">=</span><span class="va">False</span>))</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display cell-output-markdown" data-execution_count="10">
 <table class="table table-sm table-striped small">
@@ -522,7 +516,7 @@ Atenção
 </table>
 </div>
 </div>
-<div id="c9b6172a" class="cell" data-execution_count="11">
+<div id="3ad2da7d" class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> itertools <span class="im">import</span> combinations</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Initialize a list to hold pairwise author combinations</span></span>
@@ -549,7 +543,7 @@ Atenção
 <span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert the list of author pairs to a DataFrame</span></span>
 <span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a>author_pairs_df <span class="op">=</span> pd.DataFrame(author_pairs_data)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="7e7ac97d" class="cell" data-execution_count="12">
+<div id="537ff630" class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>Markdown(author_pairs_df.head(<span class="dv">20</span>).to_markdown(index<span class="op">=</span><span class="va">False</span>))</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Save the DataFrame to CSV</span></span>

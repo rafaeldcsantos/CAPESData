@@ -1,1 +1,9 @@
-/* css styles */
+/*-- scss:defaults --*/
+.sidebar-logo {
+  max-width: 100%;
+  align: center; }
+
+.cell-output {
+  border-left: 4px solid #c0e0ff;
+  padding-left: 4px;
+  padding-bottom: 3px; }

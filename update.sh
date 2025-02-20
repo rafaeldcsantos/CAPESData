@@ -1,6 +1,6 @@
 #!/bin/bash
 
 # Rerun quarto
-sassc Resources/CSS/custom.scss Resources/CSS/custom.css
+sassc styles.scss styles.css 
 quarto render --to html
 

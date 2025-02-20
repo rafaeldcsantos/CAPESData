@@ -16,10 +16,12 @@ website:
         contents:
         - text: "Obtendo os dados"
           href: sucupira-baixando.qmd
-        - text: "Pré-processamento"
-          href: sucupira-preprocessamento.qmd
-        - text: "Análise Básica"
-          href: sucupira-producao-eda.qmd
+#        - text: "Pré-processamento"
+#          href: sucupira-preprocessamento.qmd
+#        - text: "Análise Básica"
+#          href: sucupira-producao-eda.qmd
+        - text: "Tempo de Titulação"
+          href: sucupira-tempotitulacao.qmd
       - section: "Dados Abertos"
         contents:
         - text: "Obtendo os dados"
